@@ -1,0 +1,262 @@
+
+# Predefined futures strategies used by the app.
+# Add your own entries and click "Reload strategies".
+# value_source: "contract" for direct series, "calculated" for expression-based strategies.
+
+strategies:
+  - name: "Matif OSR(K)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRK"
+        ticker_root: "IJ"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Matif OSR(Q)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRK"
+        ticker_root: "IJ"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Matif OSR(K) - ICE Canola(K)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRK"
+        ticker_root: "IJ"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "EURUSD Curncy"
+      - alias: "CANK"
+        ticker_root: "RS"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "CADUSD Curncy"
+  - name: "Matif OSR(K) - Matif OSR(Q)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRK"
+        ticker_root: "IJ"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "OSRQ"
+        ticker_root: "IJ"
+        month_code: "Q"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Matif Wheat(K)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAK"
+        ticker_root: "CA"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Matif Wheat(K) - Matif Wheat(U)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAK"
+        ticker_root: "CA"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CAU"
+        ticker_root: "CA"
+        month_code: "U"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Soybean Oil (K)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOK"
+        ticker_root: "BO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Oil share (BOK, SMK)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "100 * BO / (BO + SM)"
+    legs:
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+  - name: "Palmoil(K) - Gasoil(K)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POK"
+        ticker_root: "KO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "GOK"
+        ticker_root: "QS"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Chicago wheat (K) - Kansas wheat (K)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WK"
+        ticker_root: "W"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWK"
+        ticker_root: "KW"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Brent(K)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COK"
+        ticker_root: "CO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+
+  # Year-shifted spread example: OSR K(y) - CANOLA K(y+1)
+  - name: "EXAMPLE1 OSR(K,y) - CANOLA(K,y+1)"
+    category: "Examples"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSR"
+        ticker_root: "IJ"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "EURUSD Curncy"
+      - alias: "CAN"
+        ticker_root: "RS"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 1
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "CADUSD Curncy"
+
+  # Non-linear expression example.
+  # Expression is evaluated after leg-level conversion to the output currency.
+  - name: "EXAMPLE2 Toy Share Example"
+    category: "Examples"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "A / (A + B)"
+    legs:
+      - alias: "A"
+        ticker_root: "IJ"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "EURUSD Curncy"
+      - alias: "B"
+        ticker_root: "RS"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "CADUSD Curncy"
+
+
+

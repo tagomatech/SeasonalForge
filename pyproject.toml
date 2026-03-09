@@ -1,0 +1,26 @@
+[project]
+name = "seaonal-forge"
+version = "0.2.0"
+description = "Seaonal Forge is a Bloomberg Terminal-first futures seasonality workbench with live lifecycle overlays and heatmaps."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Eric Tallent" }
+]
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "plotly>=5.0",
+  "pyarrow>=12.0",
+  "pyyaml>=6.0",
+  "streamlit>=1.30"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
