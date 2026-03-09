@@ -22,12 +22,9 @@ streamlit run app.py
 - `docs/screenshots/seasonal_overlay.png`
 - `docs/screenshots/seasonal_heatmap.png`
 
-Example markdown (uncomment when files exist):
+![Seasonal Overlay](docs/screenshots/seasonal_overlay.png)
+![Seasonal Heatmap](docs/screenshots/seasonal_heatmap.png)
 
-```markdown
-<!-- ![Seasonal Overlay](docs/screenshots/seasonal_overlay.png) -->
-<!-- ![Seasonal Heatmap](docs/screenshots/seasonal_heatmap.png) -->
-```
 
 ## Strategy YAML
 
