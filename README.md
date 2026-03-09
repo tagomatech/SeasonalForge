@@ -1,4 +1,4 @@
-# Seaonal Forge
+# Seasonal Forge
 
 Seaonal Forge is a Bloomberg Terminal-first futures seasonality workbench with forged lifecycle overlays, heatmaps, and multi-leg spread analytics. CSV and Parquet inputs are supported as fallbacks.
 
