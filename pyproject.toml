@@ -1,7 +1,7 @@
 [project]
-name = "seaonal-forge"
-version = "0.2.0"
-description = "Seaonal Forge is a Bloomberg Terminal-first futures seasonality workbench with live lifecycle overlays and heatmaps."
+name = "Seasonal-forge"
+version = "0.3.0"
+description = "Seasonal Forge is a Bloomberg Terminal-first futures seasonality workbench with lifecycle overlays, heatmaps, and trading insights."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }

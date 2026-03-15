@@ -449,6 +449,139 @@ def lifecycle_stats_at_asof(
     return out
 
 
+def summarize_forward_trade_metrics(
+    matrix: pd.DataFrame,
+    calendar: pd.DataFrame,
+    *,
+    reference_anchor_year: int,
+) -> Dict[str, Any]:
+    """
+    Summarize forward-looking seasonal trade metrics from ASOF to the end of the window.
+
+    Metrics are computed across historical anchor years using the current ASOF point as
+    the trade start and the last available point in the selected forward window as the exit.
+    """
+    if matrix.empty or calendar.empty:
+        return {"ok": False, "reason": "No lifecycle data"}
+
+    cal = calendar.set_index("t")
+    if "is_asof" not in cal.columns:
+        return {"ok": False, "reason": "ASOF not in window"}
+
+    asof_rows = cal.loc[cal["is_asof"]]
+    if asof_rows.empty:
+        return {"ok": False, "reason": "ASOF not in window"}
+
+    t_asof = int(asof_rows.index[0])
+    if t_asof not in matrix.index:
+        return {"ok": False, "reason": "ASOF not in window"}
+
+    forward_t = [int(t) for t in matrix.index if int(t) > t_asof]
+    if not forward_t:
+        return {"ok": False, "reason": "No forward window after ASOF"}
+
+    hist_years = [int(y) for y in matrix.columns if int(y) != int(reference_anchor_year)]
+    if not hist_years:
+        return {"ok": False, "reason": "No historical anchor years"}
+
+    trade_rows: List[Dict[str, Any]] = []
+    vol_rows: List[float] = []
+
+    for year in hist_years:
+        start_val = pd.to_numeric(pd.Series([matrix.loc[t_asof, year]])).iloc[0]
+        if not np.isfinite(start_val):
+            continue
+
+        path = pd.to_numeric(matrix.loc[[t_asof] + forward_t, year], errors="coerce").dropna()
+        if len(path) < 2:
+            continue
+
+        end_val = float(path.iloc[-1])
+        delta = float(end_val - start_val)
+        path_move = path - float(start_val)
+        mae_long = float(path_move.min())
+        mae_short = float(path_move.max())
+        mfe_long = float(path_move.max())
+        mfe_short = float(path_move.min())
+
+        daily_diff = path.diff().dropna()
+        if len(daily_diff) >= 2:
+            vol_rows.append(float(daily_diff.std(ddof=1) * np.sqrt(252.0)))
+
+        trade_rows.append(
+            {
+                "anchor_year": int(year),
+                "start": float(start_val),
+                "end": end_val,
+                "delta": delta,
+                "mae_long": mae_long,
+                "mae_short": mae_short,
+                "mfe_long": mfe_long,
+                "mfe_short": mfe_short,
+            }
+        )
+
+    if not trade_rows:
+        return {"ok": False, "reason": "Insufficient historical forward samples"}
+
+    trades = pd.DataFrame(trade_rows)
+    median_delta = float(trades["delta"].median())
+    avg_delta = float(trades["delta"].mean())
+
+    if median_delta > 0:
+        bias = "Long"
+        success = trades["delta"] > 0
+        adverse = -trades["mae_long"]
+        favorable = trades["mfe_long"]
+    elif median_delta < 0:
+        bias = "Short"
+        success = trades["delta"] < 0
+        adverse = trades["mae_short"]
+        favorable = -trades["mfe_short"]
+    else:
+        bias = "Flat"
+        success = trades["delta"] == 0
+        adverse = pd.Series(np.nan, index=trades.index, dtype=float)
+        favorable = pd.Series(np.nan, index=trades.index, dtype=float)
+
+    reward_risk = np.nan
+    adverse_median = float(adverse.median()) if adverse.notna().any() else np.nan
+    favorable_median = float(favorable.median()) if favorable.notna().any() else np.nan
+    if np.isfinite(adverse_median) and adverse_median > 0 and np.isfinite(favorable_median):
+        reward_risk = float(favorable_median / adverse_median)
+
+    current_stats = lifecycle_stats_at_asof(
+        matrix,
+        calendar,
+        reference_anchor_year=int(reference_anchor_year),
+        years=[int(y) for y in matrix.columns],
+    )
+    zscore = float(current_stats["zscore"]) if current_stats.get("ok") and "zscore" in current_stats else np.nan
+    percentile = float(current_stats["percentile"]) if current_stats.get("ok") and "percentile" in current_stats else np.nan
+
+    return {
+        "ok": True,
+        "bias": bias,
+        "sample_size": int(len(trades)),
+        "up_rate": float((trades["delta"] > 0).mean() * 100.0),
+        "down_rate": float((trades["delta"] < 0).mean() * 100.0),
+        "success_rate": float(success.mean() * 100.0),
+        "avg_change": avg_delta,
+        "median_change": median_delta,
+        "avg_abs_change": float(trades["delta"].abs().mean()),
+        "median_abs_change": float(trades["delta"].abs().median()),
+        "mae_median": adverse_median,
+        "mae_p75": float(adverse.quantile(0.75)) if adverse.notna().any() else np.nan,
+        "mae_p90": float(adverse.quantile(0.90)) if adverse.notna().any() else np.nan,
+        "mfe_median": favorable_median,
+        "reward_risk": reward_risk,
+        "hist_vol": float(np.nanmedian(vol_rows)) if vol_rows else np.nan,
+        "zscore": zscore,
+        "percentile": percentile,
+        "trade_rows": trades,
+    }
+
+
 
 
 

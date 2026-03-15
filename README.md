@@ -1,12 +1,13 @@
-# Seaonal Forge
+# Seasonal Forge
 
-Seaonal Forge is a Bloomberg Terminal-first futures seasonality workbench with forged lifecycle overlays, heatmaps, and multi-leg spread analytics. CSV and Parquet inputs are supported as fallbacks.
+Seasonal Forge is a Bloomberg Terminal-first futures seasonality workbench with lifecycle overlays, heatmaps, multi-leg spread analytics, and cross-strategy trading insights. CSV and Parquet inputs are supported as fallbacks.
 
 ## Highlights
 
 - Primary feed: Bloomberg (`blpapi`) with local cache and live snapshot refresh
 - Seasonal lifecycle overlay around ASOF (`-m` to `+m` window)
 - Seasonal heatmap with month or month-decade buckets
+- Trading insights table with hit rate, expected move, statistical stop bands, z-score, and volatility
 - Multi-leg spreads with FX/UoM normalization and optional expressions
 - Modular architecture for adding new providers and visuals
 
@@ -22,12 +23,9 @@ streamlit run app.py
 - `docs/screenshots/seasonal_overlay.png`
 - `docs/screenshots/seasonal_heatmap.png`
 
-Example markdown (uncomment when files exist):
+![Seasonal Overlay](docs/screenshots/seasonal_overlay.png)
+![Seasonal Heatmap](docs/screenshots/seasonal_heatmap.png)
 
-```markdown
-<!-- ![Seasonal Overlay](docs/screenshots/seasonal_overlay.png) -->
-<!-- ![Seasonal Heatmap](docs/screenshots/seasonal_heatmap.png) -->
-```
 
 ## Strategy YAML
 

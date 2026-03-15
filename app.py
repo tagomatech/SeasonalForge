@@ -30,12 +30,13 @@ from ui_components import (
     to_period_log_return,
     plot_lifecycle_heatmap,
     lifecycle_stats_at_asof,
+    summarize_forward_trade_metrics,
 )
 
 
 APP_DIR = Path(__file__).resolve().parent
 DEFAULT_STRATEGIES_PATH = APP_DIR / "strategies.yaml"
-APP_NAME = "Seaonal Forge"
+APP_NAME = "Seasonal Forge"
 APP_TAGLINE = "Forged futures seasonality, spreads, and heatmaps"
 
 
@@ -191,6 +192,124 @@ def clear_streamlit_caches(*, reset_asof_input: bool = False) -> None:
     st.cache_resource.clear()
     if reset_asof_input:
         st.session_state.pop("asof_date_input", None)
+
+
+@st.cache_data(show_spinner=False)
+def build_trading_insights_table(
+    df_raw: pd.DataFrame,
+    specs: Tuple[StrategySpec, ...],
+    strategy_categories: Dict[str, str],
+    *,
+    asof: pd.Timestamp,
+    window_months: Tuple[int, int],
+    alignment: str,
+    fill_enabled: bool,
+    fill_limit: int,
+) -> pd.DataFrame:
+    """Compute cross-strategy forward seasonal metrics for the current ASOF/window."""
+    engine = FuturesComboEngine(df_raw, date_col="date" if "date" in df_raw.columns else None)
+    fill = FillPolicy(method="ffill", limit=int(fill_limit), apply_to_fx=True) if fill_enabled else None
+
+    rows: List[Dict[str, Any]] = []
+    for spec in specs:
+        try:
+            curves, report = engine.build_with_report(spec, fill=fill, multiindex_cols=False)
+            curves = curves.dropna(how="all")
+            if curves.empty:
+                raise ValueError("No curve values available")
+
+            matrix, calendar, meta = overlay_lifecycle_window_compat(
+                engine,
+                curves,
+                window_months=(int(window_months[0]), int(window_months[1])),
+                asof=pd.Timestamp(asof),
+                reference="front",
+                axis="t",
+                alignment=alignment,
+            )
+            metrics = summarize_forward_trade_metrics(
+                matrix,
+                calendar,
+                reference_anchor_year=int(meta["reference_anchor_year"]),
+            )
+            stats = lifecycle_stats_at_asof(
+                matrix,
+                calendar,
+                int(meta["reference_anchor_year"]),
+                [int(y) for y in matrix.columns],
+            )
+            ok_years = int((report["status"] == "ok").sum()) if not report.empty else 0
+
+            row: Dict[str, Any] = {
+                "strategy": spec.name,
+                "category": strategy_categories.get(spec.name, "Other"),
+                "value_source": VALUE_SOURCE_LABELS.get(spec.value_source, spec.value_source),
+                "status": "OK" if metrics.get("ok") else "Insufficient sample",
+                "status_detail": metrics.get("reason", ""),
+                "anchor_years": ok_years,
+                "sample": metrics.get("sample_size", 0),
+                "bias": metrics.get("bias", "NA"),
+                "success_pct": metrics.get("success_rate", np.nan),
+                "up_pct": metrics.get("up_rate", np.nan),
+                "avg_change": metrics.get("avg_change", np.nan),
+                "median_change": metrics.get("median_change", np.nan),
+                "avg_abs_change": metrics.get("avg_abs_change", np.nan),
+                "mae_p75": metrics.get("mae_p75", np.nan),
+                "mae_p90": metrics.get("mae_p90", np.nan),
+                "reward_risk": metrics.get("reward_risk", np.nan),
+                "hist_vol": metrics.get("hist_vol", np.nan),
+                "zscore": metrics.get("zscore", np.nan),
+                "percentile": metrics.get("percentile", np.nan),
+                "current_value": stats.get("ref_val", np.nan) if stats.get("ok") else np.nan,
+                "asof": pd.Timestamp(meta["asof"]),
+                "window_end": pd.Timestamp(meta["window_end_date"]),
+            }
+            stop = row["mae_p75"]
+            median_edge = abs(float(row["median_change"])) if np.isfinite(row["median_change"]) else np.nan
+            if np.isfinite(median_edge) and np.isfinite(stop) and stop > 0:
+                row["edge_score"] = float((row["success_pct"] / 100.0) * (median_edge / stop))
+            else:
+                row["edge_score"] = np.nan
+            rows.append(row)
+        except Exception as exc:
+            rows.append(
+                {
+                    "strategy": spec.name,
+                    "category": strategy_categories.get(spec.name, "Other"),
+                    "value_source": VALUE_SOURCE_LABELS.get(spec.value_source, spec.value_source),
+                    "status": "Error",
+                    "status_detail": str(exc),
+                    "anchor_years": 0,
+                    "sample": 0,
+                    "bias": "NA",
+                    "success_pct": np.nan,
+                    "up_pct": np.nan,
+                    "avg_change": np.nan,
+                    "median_change": np.nan,
+                    "avg_abs_change": np.nan,
+                    "mae_p75": np.nan,
+                    "mae_p90": np.nan,
+                    "reward_risk": np.nan,
+                    "hist_vol": np.nan,
+                    "zscore": np.nan,
+                    "percentile": np.nan,
+                    "current_value": np.nan,
+                    "asof": pd.Timestamp(asof),
+                    "window_end": pd.Timestamp(asof),
+                    "edge_score": np.nan,
+                }
+            )
+
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+
+    out = out.sort_values(
+        by=["edge_score", "success_pct", "sample", "strategy"],
+        ascending=[False, False, False, True],
+        na_position="last",
+    ).reset_index(drop=True)
+    return out
 
 
 # -------------------------
@@ -476,8 +595,24 @@ def main() -> None:
             reference_anchor_year=ref_ay,
         )
 
+    insights_df = build_trading_insights_table(
+        df_raw,
+        tuple(specs.values()),
+        strategy_categories,
+        asof=asof_ts,
+        window_months=(int(start_m), int(end_m)),
+        alignment=alignment_mode,
+        fill_enabled=fill_enabled,
+        fill_limit=int(fill_limit),
+    )
+
     # Tabs
-    tab1, tab2, tab3 = st.tabs(["Seasonal (life-cycle)", "Full timeline", "Diagnostics"])
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "Seasonal (life-cycle)",
+        "Trading insights",
+        "Full timeline",
+        "Diagnostics",
+    ])
 
     with tab1:
         st.subheader(strategy_name)
@@ -663,6 +798,155 @@ def main() -> None:
             st.dataframe(calendar)
 
     with tab2:
+        st.subheader("Trading insights")
+        st.caption("Cross-strategy seasonal trade metrics from the selected ASOF to the end of the current forward window.")
+
+        insight_categories = ["All"] + [
+            c for c in unique_categories if c in set(insights_df["category"].dropna().astype(str))
+        ]
+        selected_insight_category = st.selectbox("Insights category", insight_categories, index=0)
+        only_actionable = st.checkbox(
+            "Show only actionable rows",
+            value=True,
+            help="Hide strategies without enough forward-history sample or analytics.",
+        )
+
+        filtered_insights = insights_df.copy()
+        if selected_insight_category != "All":
+            filtered_insights = filtered_insights.loc[
+                filtered_insights["category"] == selected_insight_category
+            ].copy()
+        if only_actionable:
+            filtered_insights = filtered_insights.loc[filtered_insights["status"] == "OK"].copy()
+
+        filtered_insights = filtered_insights.reset_index(drop=True)
+
+        c1, c2, c3, c4 = st.columns(4)
+        actionable_count = int((filtered_insights["status"] == "OK").sum()) if not filtered_insights.empty else 0
+        bullish_count = int((filtered_insights["bias"] == "Long").sum()) if not filtered_insights.empty else 0
+        bearish_count = int((filtered_insights["bias"] == "Short").sum()) if not filtered_insights.empty else 0
+        best_row = filtered_insights.iloc[0] if not filtered_insights.empty else None
+        c1.metric("Strategies", f"{len(filtered_insights)}")
+        c2.metric("Actionable", f"{actionable_count}")
+        c3.metric("Long / Short", f"{bullish_count} / {bearish_count}")
+        c4.metric(
+            "Top edge",
+            best_row["strategy"] if best_row is not None else "NA",
+            f"{best_row['edge_score']:.2f}"
+            if best_row is not None and np.isfinite(best_row["edge_score"])
+            else "NA",
+        )
+
+        if filtered_insights.empty:
+            st.info("No strategy matches the current insights filters.")
+        else:
+            display_cols = [
+                "strategy",
+                "category",
+                "bias",
+                "success_pct",
+                "up_pct",
+                "median_change",
+                "avg_change",
+                "mae_p75",
+                "mae_p90",
+                "reward_risk",
+                "hist_vol",
+                "zscore",
+                "percentile",
+                "edge_score",
+                "sample",
+                "status",
+            ]
+            table = filtered_insights[display_cols].copy()
+            styler = table.style.format(
+                {
+                    "success_pct": "{:.1f}%",
+                    "up_pct": "{:.1f}%",
+                    "median_change": "{:.2f}",
+                    "avg_change": "{:.2f}",
+                    "mae_p75": "{:.2f}",
+                    "mae_p90": "{:.2f}",
+                    "reward_risk": "{:.2f}",
+                    "hist_vol": "{:.2f}",
+                    "zscore": "{:.2f}",
+                    "percentile": "{:.0f}p",
+                    "edge_score": "{:.2f}",
+                },
+                na_rep="NA",
+            )
+            styler = styler.background_gradient(
+                subset=["success_pct", "reward_risk", "edge_score"], cmap="Greens"
+            )
+            styler = styler.background_gradient(
+                subset=["zscore"], cmap="RdYlGn_r", vmin=-2.5, vmax=2.5
+            )
+            styler = styler.background_gradient(
+                subset=["mae_p75", "mae_p90", "hist_vol"], cmap="Reds"
+            )
+            st.dataframe(
+                styler,
+                width="stretch",
+                column_config={
+                    "strategy": st.column_config.TextColumn("Strategy", width="large"),
+                    "category": st.column_config.TextColumn("Category", width="medium"),
+                    "bias": st.column_config.TextColumn("Bias", width="small"),
+                    "success_pct": st.column_config.NumberColumn(
+                        "Success %",
+                        help="Hit rate in the direction of the inferred seasonal bias.",
+                    ),
+                    "up_pct": st.column_config.NumberColumn(
+                        "Up %",
+                        help="Share of historical windows that finished higher than ASOF.",
+                    ),
+                    "median_change": st.column_config.NumberColumn(
+                        "Median dP",
+                        help="Median point move from ASOF to the end of the forward window.",
+                    ),
+                    "avg_change": st.column_config.NumberColumn("Average dP"),
+                    "mae_p75": st.column_config.NumberColumn(
+                        "Stop P75",
+                        help="75th percentile adverse excursion in the bias direction.",
+                    ),
+                    "mae_p90": st.column_config.NumberColumn(
+                        "Stop P90",
+                        help="90th percentile adverse excursion in the bias direction.",
+                    ),
+                    "reward_risk": st.column_config.NumberColumn("Reward/Risk"),
+                    "hist_vol": st.column_config.NumberColumn(
+                        "Hist vol",
+                        help="Median annualized realized volatility over the forward path.",
+                    ),
+                    "zscore": st.column_config.NumberColumn(
+                        "Z-score",
+                        help="Current ASOF value versus historical ASOF distribution.",
+                    ),
+                    "percentile": st.column_config.NumberColumn("Percentile"),
+                    "edge_score": st.column_config.NumberColumn("Edge"),
+                    "sample": st.column_config.NumberColumn(
+                        "N",
+                        help="Historical anchor years used in the forward metric sample.",
+                    ),
+                    "status": st.column_config.TextColumn("Status", width="small"),
+                },
+                hide_index=True,
+            )
+
+            with st.expander("Metric definitions", expanded=False):
+                st.markdown(
+                    """
+                    - `Bias`: inferred trade direction from the median historical forward move.
+                    - `Success %`: historical hit rate in that bias direction.
+                    - `Stop P75 / P90`: adverse excursion percentile to frame statistical stop placement.
+                    - `Z-score / Percentile`: how stretched the current spread is versus its historical ASOF distribution.
+                    - `Edge`: simple ranking score using hit rate and median move versus stop distance.
+                    """
+                )
+
+            with st.expander("Full insights dataset", expanded=False):
+                st.dataframe(filtered_insights, width="stretch", hide_index=True)
+
+    with tab3:
         st.subheader("Full timeline (real dates)")
         st.caption("Full series on calendar dates.")
 
@@ -680,7 +964,7 @@ def main() -> None:
         with st.expander("Availability table", expanded=False):
             st.dataframe(engine.availability(curves))
 
-    with tab3:
+    with tab4:
         st.subheader("Diagnostics")
         st.caption("Use this tab to inspect missing data, FX, and contract mapping.")
 
