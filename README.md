@@ -1,6 +1,6 @@
 # Seasonal Forge
 
-Seasonal Forge is a Bloomberg Terminal-first futures seasonality workbench with lifecycle overlays, heatmaps, multi-leg spread analytics, and cross-strategy trading insights. CSV and Parquet inputs are supported as fallbacks.
+Seaonal Forge is a Bloomberg Terminal-first **commodity futures seasonality** workbench with forged lifecycle overlays, heatmaps, and multi-leg spread analytics. CSV and Parquet inputs are supported as fallbacks.
 
 ## Highlights
 
