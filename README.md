@@ -10,6 +10,7 @@ Seaonal Forge is a Bloomberg Terminal-first **commodity futures seasonality** wo
 - Trading insights table with hit rate, expected move, statistical stop bands, z-score, and volatility
 - Multi-leg spreads with FX/UoM normalization and optional expressions
 - Modular architecture for adding new providers and visuals
+- *Trading Insights* tab showing trading metrics
 
 ## Quick start
 
@@ -22,9 +23,11 @@ streamlit run app.py
 
 - `docs/screenshots/seasonal_overlay.png`
 - `docs/screenshots/seasonal_heatmap.png`
+- `docs/screenshots/trading_insights.png`
 
 ![Seasonal Overlay](docs/screenshots/seasonal_overlay.png)
 ![Seasonal Heatmap](docs/screenshots/seasonal_heatmap.png)
+![Seasonal Heatmap](docs/screenshots/trading_insights.png)
 
 
 ## Strategy YAML
