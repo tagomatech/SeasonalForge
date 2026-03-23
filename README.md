@@ -4,7 +4,7 @@ Seaonal Forge is a Bloomberg Terminal-first **commodity futures seasonality** wo
 
 ## Highlights
 
-- Primary feed: Bloomberg (`blpapi`) with local cache and ***live* snapshot*** refresh
+- Primary feed: Bloomberg (`blpapi`) with local cache and ***live* snapshot** refresh
 - Seasonal lifecycle overlay around ASOF (`-m` to `+m` window)
 - Seasonal heatmap with month or month-decade buckets
 - *Trading Insights* table with hit rate, expected move, statistical stop bands, z-score, and volatility
