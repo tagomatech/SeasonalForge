@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import inspect
+import re
 import tomllib
 from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
@@ -76,6 +77,54 @@ STRATEGY_CARD_STYLE = """
 }
 </style>
 """
+
+
+def _strategy_search_tokens(query: str) -> List[str]:
+    """Split free-text strategy search into lowercase tokens."""
+    return [tok for tok in re.split(r"[^A-Za-z0-9]+", str(query).lower()) if tok]
+
+
+def _strategy_search_text(name: str, spec: StrategySpec, category: str) -> str:
+    """Build a searchable text blob from strategy metadata and leg details."""
+    parts: List[str] = [
+        str(name),
+        str(category),
+        str(spec.output_currency),
+        str(spec.value_source),
+        str(spec.expression or ""),
+    ]
+    for leg in spec.legs:
+        parts.extend([str(leg.alias), str(leg.ticker_root), str(leg.month_code)])
+    return " ".join(parts).lower()
+
+
+def filter_strategy_names(
+    specs: Dict[str, StrategySpec],
+    strategy_categories: Dict[str, str],
+    *,
+    category_filter: str,
+    search_query: str,
+) -> List[str]:
+    """Filter strategies by category and free-text search while preserving YAML order."""
+    tokens = _strategy_search_tokens(search_query)
+    names = [
+        name
+        for name in specs.keys()
+        if category_filter == "All" or strategy_categories.get(name) == category_filter
+    ]
+    if not tokens:
+        return names
+
+    filtered: List[str] = []
+    for name in names:
+        haystack = _strategy_search_text(
+            name,
+            specs[name],
+            strategy_categories.get(name, "Other"),
+        )
+        if all(token in haystack for token in tokens):
+            filtered.append(name)
+    return filtered
 
 
 # -------------------------
@@ -334,8 +383,8 @@ def main() -> None:
         st.markdown(
             """
             <div class="strategy-card">
-              <div class="title">Active Strategy</div>
-              <div class="sub">Pick strategy first, then tune data and window settings.</div>
+              <div class="title">Strategy Browser</div>
+              <div class="sub">Filter by category or search text, then tune the analysis window.</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -364,23 +413,57 @@ def main() -> None:
                 str(c).lower(),
             ),
         )
-        selected_category = st.selectbox("Category", ["All"] + unique_categories)
-        strategy_options = [
-            name
-            for name in specs.keys()
-            if selected_category == "All" or strategy_categories.get(name) == selected_category
-        ]
+        category_counts = {
+            category: sum(1 for value in strategy_categories.values() if value == category)
+            for category in unique_categories
+        }
+        category_counts["All"] = len(specs)
+        selected_category = st.selectbox(
+            "Category",
+            ["All"] + unique_categories,
+            format_func=lambda category: f"{category} ({category_counts.get(category, 0)})",
+        )
+        strategy_search = st.text_input(
+            "Find strategy",
+            placeholder="Type OSR, wheat, gasoil, Brent, K, Q...",
+        )
+        strategy_options = filter_strategy_names(
+            specs,
+            strategy_categories,
+            category_filter=selected_category,
+            search_query=strategy_search,
+        )
         if not strategy_options:
-            st.error("No strategies found for the selected category.")
+            st.error("No strategies match the current filters. Try clearing the search or changing category.")
             st.stop()
 
-        strategy_name = st.selectbox("Select strategy", strategy_options)
+        prior_strategy_name = st.session_state.get("selected_strategy_name")
+        default_strategy_name = (
+            prior_strategy_name if prior_strategy_name in strategy_options else strategy_options[0]
+        )
+        default_strategy_index = strategy_options.index(default_strategy_name)
+        strategy_picker_label = f"Matching strategies ({len(strategy_options)})"
+        if len(strategy_options) <= 12:
+            strategy_name = st.radio(
+                strategy_picker_label,
+                strategy_options,
+                index=default_strategy_index,
+            )
+        else:
+            strategy_name = st.selectbox(
+                strategy_picker_label,
+                strategy_options,
+                index=default_strategy_index,
+            )
+        st.session_state["selected_strategy_name"] = strategy_name
         spec = specs[strategy_name]
         value_source_label = VALUE_SOURCE_LABELS.get(spec.value_source, str(spec.value_source))
         st.caption(
             f"Category: {strategy_categories.get(strategy_name, 'Other')} | "
-            f"Type: {value_source_label}"
+            f"Type: {value_source_label} | "
+            f"Legs: {len(spec.legs)}"
         )
+        analysis_controls_slot = st.container()
         st.divider()
 
         if st.button("Reload data", width="stretch"):
@@ -515,9 +598,9 @@ def main() -> None:
     curves = curves.dropna(how="all")
     asof_default = pd.Timestamp(curves.index.max()) if len(curves.index) else pd.Timestamp(engine.df.index.max())
 
-    # As-of selection.
-    with st.sidebar:
-        st.header("As-of")
+    # Analysis-window selection.
+    with analysis_controls_slot:
+        st.header("Analysis window")
         min_d = pd.Timestamp(curves.index.min()).date() if len(curves.index) else asof_default.date()
         max_d = pd.Timestamp(curves.index.max()).date() if len(curves.index) else asof_default.date()
         asof_mode = st.radio(
@@ -538,9 +621,6 @@ def main() -> None:
             )
             asof_ts = pd.Timestamp(asof_date)
 
-    # Seasonal window selection
-    with st.sidebar:
-        st.header("Seasonal window")
         start_m, end_m = st.slider(
             "Window in months relative to ASOF",
             min_value=-24,

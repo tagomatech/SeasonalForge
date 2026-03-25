@@ -495,55 +495,58 @@ strategies:
         currency: null
         fx_ticker: null
 
+  # Example templates below are commented out so they stay visible as references
+  # but do not appear in the app's list of available strategies.
+
   # Year-shifted spread example: OSR K(y) - CANOLA K(y+1)
-  - name: "EXAMPLE1 OSR(K,y) - CANOLA(K,y+1)"
-    category: "Examples"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "OSR"
-        ticker_root: "IJ"
-        month_code: "K"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: null
-        fx_ticker: "EURUSD Curncy"
-      - alias: "CAN"
-        ticker_root: "RS"
-        month_code: "K"
-        multiplier: -1
-        year_shift: 1
-        uom_mul: 1.0
-        currency: null
-        fx_ticker: "CADUSD Curncy"
+  # - name: "EXAMPLE1 OSR(K,y) - CANOLA(K,y+1)"
+  #   category: "Examples"
+  #   output_currency: "USD"
+  #   min_obs: 5
+  #   value_source: "contract"
+  #   legs:
+  #     - alias: "OSR"
+  #       ticker_root: "IJ"
+  #       month_code: "K"
+  #       multiplier: 1
+  #       year_shift: 0
+  #       uom_mul: 1.0
+  #       currency: null
+  #       fx_ticker: "EURUSD Curncy"
+  #     - alias: "CAN"
+  #       ticker_root: "RS"
+  #       month_code: "K"
+  #       multiplier: -1
+  #       year_shift: 1
+  #       uom_mul: 1.0
+  #       currency: null
+  #       fx_ticker: "CADUSD Curncy"
 
   # Non-linear expression example.
   # Expression is evaluated after leg-level conversion to the output currency.
-  - name: "EXAMPLE2 Toy Share Example"
-    category: "Examples"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "calculated"
-    expression: "A / (A + B)"
-    legs:
-      - alias: "A"
-        ticker_root: "IJ"
-        month_code: "K"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: null
-        fx_ticker: "EURUSD Curncy"
-      - alias: "B"
-        ticker_root: "RS"
-        month_code: "K"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: null
-        fx_ticker: "CADUSD Curncy"
+  # - name: "EXAMPLE2 Toy Share Example"
+  #   category: "Examples"
+  #   output_currency: "USD"
+  #   min_obs: 5
+  #   value_source: "calculated"
+  #   expression: "A / (A + B)"
+  #   legs:
+  #     - alias: "A"
+  #       ticker_root: "IJ"
+  #       month_code: "K"
+  #       multiplier: 1
+  #       year_shift: 0
+  #       uom_mul: 1.0
+  #       currency: null
+  #       fx_ticker: "EURUSD Curncy"
+  #     - alias: "B"
+  #       ticker_root: "RS"
+  #       month_code: "K"
+  #       multiplier: 1
+  #       year_shift: 0
+  #       uom_mul: 1.0
+  #       currency: null
+  #       fx_ticker: "CADUSD Curncy"
 
 
 
