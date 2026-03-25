@@ -507,7 +507,9 @@ class FuturesComboEngine:
             else:
                 res.columns = pd.Index([], name="anchor_year")
 
-        report = pd.DataFrame(report_rows).sort_values("anchor_year").reset_index(drop=True)
+        report = pd.DataFrame(report_rows, columns=["anchor_year", "status", "reason"])
+        if not report.empty:
+            report = report.sort_values("anchor_year").reset_index(drop=True)
         return res, report
 
     def build(

@@ -79,6 +79,11 @@ STRATEGY_CARD_STYLE = """
 """
 
 
+def _compact_search_text(value: str) -> str:
+    """Normalize text so compact queries like OSRK still find OSR(K)."""
+    return re.sub(r"[^A-Za-z0-9]+", "", str(value).lower())
+
+
 def _strategy_search_tokens(query: str) -> List[str]:
     """Split free-text strategy search into lowercase tokens."""
     return [tok for tok in re.split(r"[^A-Za-z0-9]+", str(query).lower()) if tok]
@@ -105,26 +110,49 @@ def filter_strategy_names(
     category_filter: str,
     search_query: str,
 ) -> List[str]:
-    """Filter strategies by category and free-text search while preserving YAML order."""
-    tokens = _strategy_search_tokens(search_query)
+    """Filter and rank strategies by category and free-text search."""
     names = [
         name
         for name in specs.keys()
         if category_filter == "All" or strategy_categories.get(name) == category_filter
     ]
-    if not tokens:
+
+    query_text = str(search_query).strip().lower()
+    query_tokens = _strategy_search_tokens(query_text)
+    query_compact = _compact_search_text(query_text)
+    if not query_tokens and not query_compact:
         return names
 
-    filtered: List[str] = []
+    order = {name: idx for idx, name in enumerate(specs.keys())}
+    ranked: List[Tuple[int, int, str]] = []
     for name in names:
-        haystack = _strategy_search_text(
-            name,
-            specs[name],
-            strategy_categories.get(name, "Other"),
-        )
-        if all(token in haystack for token in tokens):
-            filtered.append(name)
-    return filtered
+        category = strategy_categories.get(name, "Other")
+        spec = specs[name]
+        haystack = _strategy_search_text(name, spec, category)
+        compact_haystack = _compact_search_text(haystack)
+        name_text = str(name).lower()
+        name_compact = _compact_search_text(name)
+
+        matches_tokens = all(token in haystack for token in query_tokens) if query_tokens else False
+        matches_compact = bool(query_compact) and query_compact in compact_haystack
+        if not matches_tokens and not matches_compact:
+            continue
+
+        if query_compact and query_compact == name_compact:
+            rank = 0
+        elif query_text and name_text.startswith(query_text):
+            rank = 1
+        elif query_text and query_text in name_text:
+            rank = 2
+        elif query_tokens and all(token in name_text for token in query_tokens):
+            rank = 3
+        elif query_compact and query_compact in name_compact:
+            rank = 4
+        else:
+            rank = 5
+        ranked.append((rank, order[name], name))
+
+    return [name for _, _, name in sorted(ranked)]
 
 
 # -------------------------
@@ -425,13 +453,15 @@ def main() -> None:
         )
         strategy_search = st.text_input(
             "Find strategy",
-            placeholder="Type OSR, wheat, gasoil, Brent, K, Q...",
+            key="strategy_search_query",
+            placeholder="Type OSR, wheat, gasoil, Brent, OSRK, K, Q...",
+            help="Search checks names, categories, leg aliases, ticker roots, month codes, and expressions.",
         )
         strategy_options = filter_strategy_names(
             specs,
             strategy_categories,
             category_filter=selected_category,
-            search_query=strategy_search,
+            search_query=strategy_search.strip(),
         )
         if not strategy_options:
             st.error("No strategies match the current filters. Try clearing the search or changing category.")
@@ -442,19 +472,12 @@ def main() -> None:
             prior_strategy_name if prior_strategy_name in strategy_options else strategy_options[0]
         )
         default_strategy_index = strategy_options.index(default_strategy_name)
-        strategy_picker_label = f"Matching strategies ({len(strategy_options)})"
-        if len(strategy_options) <= 12:
-            strategy_name = st.radio(
-                strategy_picker_label,
-                strategy_options,
-                index=default_strategy_index,
-            )
-        else:
-            strategy_name = st.selectbox(
-                strategy_picker_label,
-                strategy_options,
-                index=default_strategy_index,
-            )
+        strategy_picker_label = f"Strategies ({len(strategy_options)})"
+        strategy_name = st.selectbox(
+            strategy_picker_label,
+            strategy_options,
+            index=default_strategy_index,
+        )
         st.session_state["selected_strategy_name"] = strategy_name
         spec = specs[strategy_name]
         value_source_label = VALUE_SOURCE_LABELS.get(spec.value_source, str(spec.value_source))
@@ -596,6 +619,12 @@ def main() -> None:
 
     curves, report = engine.build_with_report(spec, fill=fill, multiindex_cols=False)
     curves = curves.dropna(how="all")
+    if curves.empty:
+        st.error("No valid anchor-year curves could be built for the selected strategy with the current data/settings.")
+        if not report.empty:
+            with st.expander("Build report", expanded=True):
+                st.dataframe(report, width="stretch", hide_index=True)
+        st.stop()
     asof_default = pd.Timestamp(curves.index.max()) if len(curves.index) else pd.Timestamp(engine.df.index.max())
 
     # Analysis-window selection.

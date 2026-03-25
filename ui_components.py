@@ -68,8 +68,17 @@ def plot_lifecycle_overlay(
         if not asof_rows.empty:
             t_asof = int(asof_rows["t"].iloc[0])
             if t_asof >= int(matrix.index.min()) and t_asof <= int(matrix.index.max()):
-                fig.add_vline(x=t_asof, line_width=2, line_dash="dot")
-                fig.add_annotation(x=t_asof, y=1.02, xref="x", yref="paper", text="ASOF", showarrow=False)
+                fig.add_vline(x=t_asof, line_width=2, line_dash="dot", line_color="#ffd166")
+                fig.add_annotation(
+                    x=t_asof,
+                    y=1.02,
+                    xref="x",
+                    yref="paper",
+                    text="ASOF",
+                    showarrow=False,
+                    font={"color": "#ffd166"},
+                    bgcolor="rgba(0,0,0,0.35)",
+                )
 
     # Tick labels
     cal = calendar.set_index("t")
