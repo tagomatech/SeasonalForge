@@ -98,7 +98,7 @@ strategies:
         uom_mul: 1.0
         currency: "EUR"
         fx_ticker: null
-  - name: "Matif OSR (X) - Matif OSR (X) lag + 1"
+  - name: "Matif OSR (X) - Matif OSR (G) lag + 1"
     category: "Oilseeds"
     output_currency: "EUR"
     min_obs: 5
@@ -112,9 +112,9 @@ strategies:
         uom_mul: 1.0
         currency: "EUR"
         fx_ticker: null
-      - alias: "OSRXL1"
+      - alias: "OSRGL1"
         ticker_root: "IJ"
-        month_code: "X"
+        month_code: "G"
         multiplier: -1
         year_shift: 1
         uom_mul: 1.0
