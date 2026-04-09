@@ -188,6 +188,8 @@ def load_strategies_yaml(path: str, reload_token: int) -> Tuple[Dict[str, Strate
             min_obs=int(item.get("min_obs", 5)),
             value_source=str(raw_value_source),
         )
+        if spec.name in specs:
+            raise ValueError(f"Duplicate strategy name in YAML: {spec.name}")
         specs[spec.name] = spec
         categories[spec.name] = str(item.get("category", "Other")).strip() or "Other"
 

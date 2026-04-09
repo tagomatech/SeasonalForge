@@ -93,6 +93,54 @@ class StrategyValueSourceTests(unittest.TestCase):
         self.assertEqual(specs["Direct"].value_source, "contract")
         self.assertEqual(specs["Calc"].value_source, "calculated")
 
+    def test_yaml_loader_rejects_duplicate_strategy_names(self) -> None:
+        payload = {
+            "strategies": [
+                {
+                    "name": "Duplicate",
+                    "category": "Examples",
+                    "output_currency": "USD",
+                    "min_obs": 1,
+                    "legs": [
+                        {
+                            "alias": "A",
+                            "ticker_root": "CO",
+                            "month_code": "K",
+                            "multiplier": 1,
+                            "year_shift": 0,
+                            "uom_mul": 1.0,
+                            "currency": "USD",
+                            "fx_ticker": None,
+                        }
+                    ],
+                },
+                {
+                    "name": "Duplicate",
+                    "category": "Examples",
+                    "output_currency": "USD",
+                    "min_obs": 1,
+                    "legs": [
+                        {
+                            "alias": "B",
+                            "ticker_root": "CO",
+                            "month_code": "M",
+                            "multiplier": 1,
+                            "year_shift": 0,
+                            "uom_mul": 1.0,
+                            "currency": "USD",
+                            "fx_ticker": None,
+                        }
+                    ],
+                },
+            ]
+        }
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "strategies.yaml"
+            path.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Duplicate strategy name in YAML"):
+                load_strategies_yaml(str(path), reload_token=54321)
+
 
 if __name__ == "__main__":
     unittest.main()

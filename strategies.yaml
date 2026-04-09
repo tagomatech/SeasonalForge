@@ -256,6 +256,72 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
+  - name: "Soybean Oil (K) - Soybean Oil (U)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOK"
+        ticker_root: "BO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "BOU"
+        ticker_root: "BO"
+        month_code: "U"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Soybean Oil (U) - Soybean Oil (N)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOU"
+        ticker_root: "BO"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "BON"
+        ticker_root: "BO"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Soybean Oil (N) - Soybean Oil (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BON"
+        ticker_root: "BO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "BOZ"
+        ticker_root: "BO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
   - name: "Oil share (BOK, SMK)"
     category: "Oilseeds"
     output_currency: "USD"
@@ -414,7 +480,7 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
-  - name: "Palmoil(K) - Gasoil(K)"
+  - name: "Palmoil (K) - Gasoil (K)"
     category: "Biofuels"
     output_currency: "USD"
     min_obs: 5
@@ -436,7 +502,91 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
-  - name: "Chicago wheat (K) - Kansas wheat (K)"
+  - name: "Chicago Wheat (N)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WN"
+        ticker_root: "W"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chicago Wheat (U)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WU"
+        ticker_root: "W"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chicago Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WZ"
+        ticker_root: "W"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Kansas Wheat (N)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWN"
+        ticker_root: "KW"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Kansas Wheat (U)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWU"
+        ticker_root: "KW"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Kansas Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWZ"
+        ticker_root: "KW"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chicago Wheat (K) - Kansas Wheat (K)"
     category: "Grains"
     output_currency: "USD"
     min_obs: 5
@@ -458,7 +608,73 @@ strategies:
         uom_mul: 1.0
         currency: null
         fx_ticker: null
-  - name: "Brent(K)"
+  - name: "Chicago Wheat (N) - Kansas Wheat (N)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WN"
+        ticker_root: "W"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWN"
+        ticker_root: "KW"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chicago Wheat (U) - Kansas Wheat (U)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WU"
+        ticker_root: "W"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWU"
+        ticker_root: "KW"
+        month_code: "U"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chicago Wheat (Z) - Kansas Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WZ"
+        ticker_root: "W"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWZ"
+        ticker_root: "KW"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Brent (K)"
     category: "Energy"
     output_currency: "USD"
     min_obs: 5
@@ -467,6 +683,34 @@ strategies:
       - alias: "COK"
         ticker_root: "CO"
         month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (M)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COM"
+        ticker_root: "CO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (N)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CON"
+        ticker_root: "CO"
+        month_code: "N"
         multiplier: 1
         year_shift: 0
         uom_mul: 1.0
@@ -489,6 +733,28 @@ strategies:
       - alias: "COM"
         ticker_root: "CO"
         month_code: "M"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Brent (M) - Brent (N)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COM"
+        ticker_root: "CO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CON"
+        ticker_root: "CO"
+        month_code: "N"
         multiplier: -1
         year_shift: 0
         uom_mul: 1.0
