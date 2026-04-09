@@ -24,7 +24,7 @@ strategies:
     min_obs: 5
     value_source: "contract"
     legs:
-      - alias: "OSRK"
+      - alias: "OSRQ"
         ticker_root: "IJ"
         month_code: "Q"
         multiplier: 1
@@ -32,7 +32,7 @@ strategies:
         uom_mul: 1.0
         currency: null
         fx_ticker: null
-  - name: "Matif OSR (Q) - Matif Wheat(N)"
+  - name: "Matif OSR (Q) - Matif Wheat(U)"
     category: "Oilseeds"
     output_currency: "EUR"
     min_obs: 5
@@ -46,9 +46,9 @@ strategies:
         uom_mul: 1.0
         currency: "EUR"
         fx_ticker: null
-      - alias: "CAN"
+      - alias: "CAU"
         ticker_root: "CA"
-        month_code: "N"
+        month_code: "U"
         multiplier: -1
         year_shift: 0
         uom_mul: 1.0
@@ -322,7 +322,7 @@ strategies:
         uom_mul: 1.0
         currency: null
         fx_ticker: null
-  - name: "Oil share (BOK, SMK)"
+  - name: "Oil Share (BOK, SMK)"
     category: "Oilseeds"
     output_currency: "USD"
     min_obs: 5
@@ -813,7 +813,3 @@ strategies:
   #       uom_mul: 1.0
   #       currency: null
   #       fx_ticker: "CADUSD Curncy"
-
-
-
-
