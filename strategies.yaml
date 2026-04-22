@@ -256,7 +256,7 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
-  - name: "CME SBO (K) - CME SBO (U)"
+  - name: "CME SBO (K) - CME SBO (N)"
     category: "Oilseeds"
     output_currency: "USD"
     min_obs: 5
@@ -272,35 +272,13 @@ strategies:
         fx_ticker: null
       - alias: "BOU"
         ticker_root: "BO"
-        month_code: "U"
-        multiplier: -1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: null
-        fx_ticker: null
-  - name: "CME SBO (U) - CME SBO (N)"
-    category: "Oilseeds"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "BOU"
-        ticker_root: "BO"
-        month_code: "U"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: null
-        fx_ticker: null
-      - alias: "BON"
-        ticker_root: "BO"
         month_code: "N"
         multiplier: -1
         year_shift: 0
         uom_mul: 1.0
         currency: null
         fx_ticker: null
-  - name: "CME SBO (N) - CME SBO (Z)"
+  - name: "CME SBO (N) - CME SBO (U)"
     category: "Oilseeds"
     output_currency: "USD"
     min_obs: 5
@@ -315,6 +293,28 @@ strategies:
         currency: null
         fx_ticker: null
       - alias: "BOZ"
+        ticker_root: "BO"
+        month_code: "U"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CME SBO (U) - CME SBO (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOU"
+        ticker_root: "BO"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "BON"
         ticker_root: "BO"
         month_code: "Z"
         multiplier: -1
