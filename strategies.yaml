@@ -502,6 +502,72 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
+  - name: "BMD Palmoil (U) / CME SBO (U)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POU"
+        ticker_root: "KO"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "BOU"
+        ticker_root: "BO"
+        month_code: "U"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 22.0462262
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (N) / CME SBO (N)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "PON"
+        ticker_root: "KO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "BON"
+        ticker_root: "BO"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 22.0462262
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (Z) / CME SBO (Z)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POZ"
+        ticker_root: "KO"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "BOZ"
+        ticker_root: "BO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 22.0462262
+        currency: "USD"
+        fx_ticker: null
   - name: "Chi. Wheat (N)"
     category: "Grains"
     output_currency: "USD"
@@ -761,6 +827,1840 @@ strategies:
         currency: null
         fx_ticker: null
 
+
+  # Added for full summer single-leg coverage (K/M/N/Q) and watched M/N/Q -> X/Z calendars
+  - name: "Matif OSR (M)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRM"
+        ticker_root: "IJ"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif OSR (N)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRN"
+        ticker_root: "IJ"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (M)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAM"
+        ticker_root: "CA"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (N)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAN"
+        ticker_root: "CA"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (Q)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAQ"
+        ticker_root: "CA"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "ICE Canola (K)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANK"
+        ticker_root: "RS"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (M)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANM"
+        ticker_root: "RS"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (N)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANN"
+        ticker_root: "RS"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (Q)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANQ"
+        ticker_root: "RS"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "CME SBO (M)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOM"
+        ticker_root: "BO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBO (Q)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOQ"
+        ticker_root: "BO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (K)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMK"
+        ticker_root: "SM"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (M)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMM"
+        ticker_root: "SM"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (N)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMN"
+        ticker_root: "SM"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (Q)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMQ"
+        ticker_root: "SM"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (K)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POK"
+        ticker_root: "KO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (M)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POM"
+        ticker_root: "KO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (N)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "PON"
+        ticker_root: "KO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (Q)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POQ"
+        ticker_root: "KO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "ICE Gasoil (K)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOK"
+        ticker_root: "QS"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (M)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOM"
+        ticker_root: "QS"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (N)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GON"
+        ticker_root: "QS"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (Q)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOQ"
+        ticker_root: "QS"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Chi. Wheat (K)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WK"
+        ticker_root: "W"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (M)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WM"
+        ticker_root: "W"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (Q)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WQ"
+        ticker_root: "W"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (K)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWK"
+        ticker_root: "KW"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (M)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWM"
+        ticker_root: "KW"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (Q)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWQ"
+        ticker_root: "KW"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Brent (Q)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COQ"
+        ticker_root: "CO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Matif OSR (M) - Matif OSR (X)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRM"
+        ticker_root: "IJ"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "OSRX"
+        ticker_root: "IJ"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif OSR (M) - Matif OSR (Z)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRM"
+        ticker_root: "IJ"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "OSRZ"
+        ticker_root: "IJ"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif OSR (N) - Matif OSR (X)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRN"
+        ticker_root: "IJ"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "OSRX"
+        ticker_root: "IJ"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif OSR (N) - Matif OSR (Z)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRN"
+        ticker_root: "IJ"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "OSRZ"
+        ticker_root: "IJ"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif OSR (Q) - Matif OSR (Z)"
+    category: "Oilseeds"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRQ"
+        ticker_root: "IJ"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "OSRZ"
+        ticker_root: "IJ"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (M) - Matif Wheat (X)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAM"
+        ticker_root: "CA"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "CAX"
+        ticker_root: "CA"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (M) - Matif Wheat (Z)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAM"
+        ticker_root: "CA"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "CAZ"
+        ticker_root: "CA"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (N) - Matif Wheat (X)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAN"
+        ticker_root: "CA"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "CAX"
+        ticker_root: "CA"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (N) - Matif Wheat (Z)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAN"
+        ticker_root: "CA"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "CAZ"
+        ticker_root: "CA"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (Q) - Matif Wheat (X)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAQ"
+        ticker_root: "CA"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "CAX"
+        ticker_root: "CA"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "Matif Wheat (Q) - Matif Wheat (Z)"
+    category: "Grains"
+    output_currency: "EUR"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CAQ"
+        ticker_root: "CA"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+      - alias: "CAZ"
+        ticker_root: "CA"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "EUR"
+        fx_ticker: null
+  - name: "ICE Canola (M) - ICE Canola (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANM"
+        ticker_root: "RS"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANX"
+        ticker_root: "RS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (M) - ICE Canola (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANM"
+        ticker_root: "RS"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANZ"
+        ticker_root: "RS"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (N) - ICE Canola (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANN"
+        ticker_root: "RS"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANX"
+        ticker_root: "RS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (N) - ICE Canola (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANN"
+        ticker_root: "RS"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANZ"
+        ticker_root: "RS"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (Q) - ICE Canola (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANQ"
+        ticker_root: "RS"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANX"
+        ticker_root: "RS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (Q) - ICE Canola (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANQ"
+        ticker_root: "RS"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANZ"
+        ticker_root: "RS"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "CME SBO (M) - CME SBO (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOM"
+        ticker_root: "BO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BOX"
+        ticker_root: "BO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBO (M) - CME SBO (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOM"
+        ticker_root: "BO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BOZ"
+        ticker_root: "BO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBO (N) - CME SBO (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BON"
+        ticker_root: "BO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BOX"
+        ticker_root: "BO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBO (N) - CME SBO (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BON"
+        ticker_root: "BO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BOZ"
+        ticker_root: "BO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBO (Q) - CME SBO (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOQ"
+        ticker_root: "BO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BOX"
+        ticker_root: "BO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBO (Q) - CME SBO (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "BOQ"
+        ticker_root: "BO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BOZ"
+        ticker_root: "BO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (M) - CME SBM (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMM"
+        ticker_root: "SM"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SMX"
+        ticker_root: "SM"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (M) - CME SBM (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMM"
+        ticker_root: "SM"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SMZ"
+        ticker_root: "SM"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (N) - CME SBM (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMN"
+        ticker_root: "SM"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SMX"
+        ticker_root: "SM"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (N) - CME SBM (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMN"
+        ticker_root: "SM"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SMZ"
+        ticker_root: "SM"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (Q) - CME SBM (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMQ"
+        ticker_root: "SM"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SMX"
+        ticker_root: "SM"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME SBM (Q) - CME SBM (Z)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "SMQ"
+        ticker_root: "SM"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SMZ"
+        ticker_root: "SM"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (M) - BMD Palmoil (X)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POM"
+        ticker_root: "KO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "POX"
+        ticker_root: "KO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (M) - BMD Palmoil (Z)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POM"
+        ticker_root: "KO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "POZ"
+        ticker_root: "KO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (N) - BMD Palmoil (X)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "PON"
+        ticker_root: "KO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "POX"
+        ticker_root: "KO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (N) - BMD Palmoil (Z)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "PON"
+        ticker_root: "KO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "POZ"
+        ticker_root: "KO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (Q) - BMD Palmoil (X)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POQ"
+        ticker_root: "KO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "POX"
+        ticker_root: "KO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (Q) - BMD Palmoil (Z)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POQ"
+        ticker_root: "KO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "POZ"
+        ticker_root: "KO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "ICE Gasoil (M) - ICE Gasoil (X)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOM"
+        ticker_root: "QS"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "GOX"
+        ticker_root: "QS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (M) - ICE Gasoil (Z)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOM"
+        ticker_root: "QS"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "GOZ"
+        ticker_root: "QS"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (N) - ICE Gasoil (X)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GON"
+        ticker_root: "QS"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "GOX"
+        ticker_root: "QS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (N) - ICE Gasoil (Z)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GON"
+        ticker_root: "QS"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "GOZ"
+        ticker_root: "QS"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (Q) - ICE Gasoil (X)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOQ"
+        ticker_root: "QS"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "GOX"
+        ticker_root: "QS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "ICE Gasoil (Q) - ICE Gasoil (Z)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "GOQ"
+        ticker_root: "QS"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "GOZ"
+        ticker_root: "QS"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Chi. Wheat (M) - Chi. Wheat (X)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WM"
+        ticker_root: "W"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "WX"
+        ticker_root: "W"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (M) - Chi. Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WM"
+        ticker_root: "W"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "WZ"
+        ticker_root: "W"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (N) - Chi. Wheat (X)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WN"
+        ticker_root: "W"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "WX"
+        ticker_root: "W"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (N) - Chi. Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WN"
+        ticker_root: "W"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "WZ"
+        ticker_root: "W"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (Q) - Chi. Wheat (X)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WQ"
+        ticker_root: "W"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "WX"
+        ticker_root: "W"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Chi. Wheat (Q) - Chi. Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "WQ"
+        ticker_root: "W"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "WZ"
+        ticker_root: "W"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (M) - KS Wheat (X)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWM"
+        ticker_root: "KW"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWX"
+        ticker_root: "KW"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (M) - KS Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWM"
+        ticker_root: "KW"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWZ"
+        ticker_root: "KW"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (N) - KS Wheat (X)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWN"
+        ticker_root: "KW"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWX"
+        ticker_root: "KW"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (N) - KS Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWN"
+        ticker_root: "KW"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWZ"
+        ticker_root: "KW"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (Q) - KS Wheat (X)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWQ"
+        ticker_root: "KW"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWX"
+        ticker_root: "KW"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "KS Wheat (Q) - KS Wheat (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "KWQ"
+        ticker_root: "KW"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "KWZ"
+        ticker_root: "KW"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "Brent (M) - Brent (X)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COM"
+        ticker_root: "CO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "COX"
+        ticker_root: "CO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (M) - Brent (Z)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COM"
+        ticker_root: "CO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "COZ"
+        ticker_root: "CO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (N) - Brent (X)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CON"
+        ticker_root: "CO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "COX"
+        ticker_root: "CO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (N) - Brent (Z)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CON"
+        ticker_root: "CO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "COZ"
+        ticker_root: "CO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (Q) - Brent (X)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COQ"
+        ticker_root: "CO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "COX"
+        ticker_root: "CO"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "Brent (Q) - Brent (Z)"
+    category: "Energy"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "COQ"
+        ticker_root: "CO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+      - alias: "COZ"
+        ticker_root: "CO"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+
+  # Added Palm Oil flat-price month coverage
+  - name: "BMD Palmoil (F)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POF"
+        ticker_root: "KO"
+        month_code: "F"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (G)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POG"
+        ticker_root: "KO"
+        month_code: "G"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (H)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POH"
+        ticker_root: "KO"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (J)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POJ"
+        ticker_root: "KO"
+        month_code: "J"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (U)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POU"
+        ticker_root: "KO"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (V)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POV"
+        ticker_root: "KO"
+        month_code: "V"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (X)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POX"
+        ticker_root: "KO"
+        month_code: "X"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+  - name: "BMD Palmoil (Z)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POZ"
+        ticker_root: "KO"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
   # Example templates below are commented out so they stay visible as references
   # but do not appear in the app's list of available strategies.
 

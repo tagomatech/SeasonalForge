@@ -91,7 +91,7 @@ def plot_lifecycle_overlay(
 
     fig.update_layout(
         title=title,
-        height=600,
+        height=540,
         legend_title_text="Anchor year",
         margin=dict(l=10, r=10, t=50, b=10),
         hovermode="x unified",

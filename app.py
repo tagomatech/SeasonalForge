@@ -6,7 +6,7 @@ import inspect
 import re
 import tomllib
 from pathlib import Path
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Dict, Any, List, Tuple, Optional, Set
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -57,6 +57,20 @@ VALUE_SOURCE_LABELS = {
     "contract": "Futures contract value",
     "calculated": "Calculated from legs",
 }
+STRUCTURE_ORDER = ["Flat price", "Spread", "Multi-leg", "Calculated"]
+MONTH_CODE_ORDER = {m: i for i, m in enumerate("FGHJKMNQUVXZ")}
+COMMODITY_LABELS = {
+    "IJ": "Matif OSR (IJ)",
+    "CA": "Matif Wheat (CA)",
+    "RS": "ICE Canola (RS)",
+    "BO": "CME SBO (BO)",
+    "SM": "CME SBM (SM)",
+    "KO": "BMD Palmoil (KO)",
+    "QS": "ICE Gasoil (QS)",
+    "W": "Chi Wheat (W)",
+    "KW": "KS Wheat (KW)",
+    "CO": "Brent (CO)",
+}
 STRATEGY_CARD_STYLE = """
 <style>
 .strategy-card {
@@ -103,19 +117,69 @@ def _strategy_search_text(name: str, spec: StrategySpec, category: str) -> str:
     return " ".join(parts).lower()
 
 
+def strategy_structure_type(spec: StrategySpec) -> str:
+    """Classify strategy as flat/spread/multi-leg/calculated for UI filtering."""
+    if spec.expression or str(spec.value_source).lower() == "calculated":
+        return "Calculated"
+    nlegs = len(spec.legs)
+    if nlegs <= 1:
+        return "Flat price"
+    if nlegs == 2:
+        return "Spread"
+    return "Multi-leg"
+
+
+def strategy_commodity_roots(spec: StrategySpec) -> Set[str]:
+    """Return normalized commodity roots used by the strategy legs."""
+    return {str(leg.ticker_root).strip().upper() for leg in spec.legs}
+
+
+def strategy_month_codes(spec: StrategySpec) -> Set[str]:
+    """Return month codes used across strategy legs."""
+    return {str(leg.month_code).strip().upper() for leg in spec.legs}
+
+
 def filter_strategy_names(
     specs: Dict[str, StrategySpec],
     strategy_categories: Dict[str, str],
     *,
     category_filter: str,
     search_query: str,
+    structure_filters: Set[str],
+    commodity_filters: Set[str],
+    month_filters: Set[str],
+    commodity_match_all: bool,
 ) -> List[str]:
-    """Filter and rank strategies by category and free-text search."""
+    """Filter and rank strategies by metadata filters and free-text search."""
     names = [
         name
         for name in specs.keys()
         if category_filter == "All" or strategy_categories.get(name) == category_filter
     ]
+
+    if structure_filters:
+        names = [name for name in names if strategy_structure_type(specs[name]) in structure_filters]
+
+    if commodity_filters:
+        if commodity_match_all:
+            names = [
+                name
+                for name in names
+                if commodity_filters.issubset(strategy_commodity_roots(specs[name]))
+            ]
+        else:
+            names = [
+                name
+                for name in names
+                if not strategy_commodity_roots(specs[name]).isdisjoint(commodity_filters)
+            ]
+
+    if month_filters:
+        names = [
+            name
+            for name in names
+            if not strategy_month_codes(specs[name]).isdisjoint(month_filters)
+        ]
 
     query_text = str(search_query).strip().lower()
     query_tokens = _strategy_search_tokens(query_text)
@@ -414,7 +478,7 @@ def main() -> None:
             """
             <div class="strategy-card">
               <div class="title">Strategy Browser</div>
-              <div class="sub">Filter by category or search text, then tune the analysis window.</div>
+              <div class="sub">Filter by category, commodity, structure, month, and search text.</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -453,6 +517,81 @@ def main() -> None:
             ["All"] + unique_categories,
             format_func=lambda category: f"{category} ({category_counts.get(category, 0)})",
         )
+
+        category_scoped_names = [
+            name
+            for name in specs.keys()
+            if selected_category == "All" or strategy_categories.get(name) == selected_category
+        ]
+
+        commodity_pool = sorted(
+            {
+                root
+                for name in category_scoped_names
+                for root in strategy_commodity_roots(specs[name])
+            },
+            key=lambda root: COMMODITY_LABELS.get(root, root),
+        )
+        commodity_counts = {
+            root: sum(
+                1
+                for name in category_scoped_names
+                if root in strategy_commodity_roots(specs[name])
+            )
+            for root in commodity_pool
+        }
+        selected_commodities = st.multiselect(
+            "Commodity (ticker root)",
+            options=commodity_pool,
+            format_func=lambda root: f"{COMMODITY_LABELS.get(root, root)} ({commodity_counts.get(root, 0)})",
+            help="Filter strategies by one or more commodity roots present in legs.",
+        )
+        commodity_match_all = st.checkbox(
+            "Require all selected commodities",
+            value=False,
+            disabled=len(selected_commodities) < 2,
+            help="If enabled, a strategy must include every selected root.",
+        )
+
+        structure_counts = {
+            structure: sum(
+                1
+                for name in category_scoped_names
+                if strategy_structure_type(specs[name]) == structure
+            )
+            for structure in STRUCTURE_ORDER
+        }
+        selected_structures = st.multiselect(
+            "Structure",
+            options=STRUCTURE_ORDER,
+            default=STRUCTURE_ORDER,
+            format_func=lambda structure: f"{structure} ({structure_counts.get(structure, 0)})",
+            help="Flat price=1 leg, Spread=2 legs, Multi-leg=3+ legs, Calculated=expression/value-source calculated.",
+        )
+
+        month_pool = sorted(
+            {
+                month
+                for name in category_scoped_names
+                for month in strategy_month_codes(specs[name])
+            },
+            key=lambda month: MONTH_CODE_ORDER.get(str(month).upper(), 99),
+        )
+        month_counts = {
+            month: sum(
+                1
+                for name in category_scoped_names
+                if month in strategy_month_codes(specs[name])
+            )
+            for month in month_pool
+        }
+        selected_months = st.multiselect(
+            "Leg month code",
+            options=month_pool,
+            format_func=lambda month: f"{month} ({month_counts.get(month, 0)})",
+            help="Keep strategies containing at least one selected month code.",
+        )
+
         strategy_search = st.text_input(
             "Find strategy",
             key="strategy_search_query",
@@ -464,6 +603,10 @@ def main() -> None:
             strategy_categories,
             category_filter=selected_category,
             search_query=strategy_search.strip(),
+            structure_filters={str(s) for s in selected_structures},
+            commodity_filters={str(c).upper() for c in selected_commodities},
+            month_filters={str(m).upper() for m in selected_months},
+            commodity_match_all=bool(commodity_match_all),
         )
         if not strategy_options:
             st.error("No strategies match the current filters. Try clearing the search or changing category.")
