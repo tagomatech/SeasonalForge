@@ -721,7 +721,7 @@ class FuturesComboEngine:
         self,
         curves: pd.DataFrame,
         *,
-        window_months: Tuple[int, int] = (-9, 6),
+        window_months: Tuple[int, int] = (-6, 3),
         asof: Optional[Union[str, pd.Timestamp]] = None,
         reference: Union[str, int] = "front",
         active_buffer_days: int = 10,

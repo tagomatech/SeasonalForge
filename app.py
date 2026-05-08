@@ -799,10 +799,10 @@ def main() -> None:
             "Window in months relative to ASOF",
             min_value=-24,
             max_value=24,
-            value=(-9, 6),
+            value=(-6, 3),
             step=1,
         )
-        st.caption("Window is in months relative to ASOF, for example -9 to +6.")
+        st.caption("Window is in months relative to ASOF, for example -6 to +3.")
         alignment_label = st.radio(
             "Lifecycle alignment",
             options=[
