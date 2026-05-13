@@ -142,6 +142,50 @@ strategies:
         uom_mul: 1.0
         currency: null
         fx_ticker: "CADUSD Curncy"
+  - name: "Matif OSR(Q) - ICE Canola(N)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRQ"
+        ticker_root: "IJ"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "EURUSD Curncy"
+      - alias: "CANN"
+        ticker_root: "RS"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "CADUSD Curncy"
+  - name: "Matif OSR(X) - ICE Canola(X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "OSRX"
+        ticker_root: "IJ"
+        month_code: "X"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "EURUSD Curncy"
+      - alias: "CANX"
+        ticker_root: "RS"
+        month_code: "X"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: "CADUSD Curncy"
   - name: "Matif OSR(K) - Matif OSR(Q)"
     category: "Oilseeds"
     output_currency: "USD"

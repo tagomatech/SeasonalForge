@@ -28,6 +28,50 @@ def _chunks(items: List[str], n: int) -> List[List[str]]:
     return [items[i : i + n] for i in range(0, len(items), n)]
 
 
+def _as_element(node: Any) -> Any:
+    """Return a blpapi message/element-like object as an element when possible."""
+    if hasattr(node, "asElement"):
+        return node.asElement()
+    return node
+
+
+def _has_element(node: Any, name: str) -> bool:
+    """Safe `hasElement` wrapper for Bloomberg message/element objects."""
+    try:
+        return bool(_as_element(node).hasElement(name))
+    except Exception:
+        return False
+
+
+def _get_element_or_none(node: Any, name: str) -> Optional[Any]:
+    """Return a child element when present, else `None`."""
+    if not _has_element(node, name):
+        return None
+    try:
+        return _as_element(node).getElement(name)
+    except Exception:
+        return None
+
+
+def _get_value_as_element(node: Any, idx: int) -> Any:
+    """Return array item `idx` as an element across blpapi value APIs."""
+    try:
+        return node.getValueAsElement(idx)
+    except Exception:
+        return node.getValue(idx)
+
+
+def _iter_reference_security_data(msg: Any) -> Iterable[Any]:
+    """Yield securityData items from a reference-data response if present."""
+    sec_data = _get_element_or_none(msg, "securityData")
+    if sec_data is None:
+        return []
+    try:
+        return [_get_value_as_element(sec_data, i) for i in range(sec_data.numValues())]
+    except Exception:
+        return []
+
+
 @dataclass(frozen=True, slots=True)
 class BloombergConnection:
     host: str = "localhost"
@@ -86,17 +130,20 @@ class BloombergClient:
             ev = self._session.nextEvent()
             for msg in ev:
                 if msg.messageType() == "ReferenceDataResponse":
-                    sec_data = msg.getElement("securityData").getValue(0)
+                    for sec_data in _iter_reference_security_data(msg):
+                        # Skip securities with errors.
+                        if _has_element(sec_data, "securityError"):
+                            continue
 
-                    # Skip securities with errors.
-                    if sec_data.hasElement("securityError"):
-                        continue
+                        fdata = _get_element_or_none(sec_data, "fieldData")
+                        if fdata is None or not fdata.hasElement("FUT_CHAIN"):
+                            continue
 
-                    fdata = sec_data.getElement("fieldData")
-                    if fdata.hasElement("FUT_CHAIN"):
                         chain = fdata.getElement("FUT_CHAIN")
                         for i in range(chain.numValues()):
-                            results.add(chain.getValue(i).getElementAsString("Security Description").upper())
+                            chain_item = _get_value_as_element(chain, i)
+                            if _has_element(chain_item, "Security Description"):
+                                results.add(chain_item.getElementAsString("Security Description").upper())
 
             if ev.eventType() == self._blpapi.Event.RESPONSE:
                 break
@@ -119,16 +166,20 @@ class BloombergClient:
             ev = self._session.nextEvent()
             for msg in ev:
                 if msg.messageType() == "HistoricalDataResponse":
-                    sec_node = msg.getElement("securityData")
-
-                    # Skip securities with errors.
-                    if sec_node.hasElement("securityError"):
+                    sec_node = _get_element_or_none(msg, "securityData")
+                    if sec_node is None:
                         continue
 
-                    f_data = sec_node.getElement("fieldData")
+                    # Skip securities with errors.
+                    if _has_element(sec_node, "securityError"):
+                        continue
+
+                    f_data = _get_element_or_none(sec_node, "fieldData")
+                    if f_data is None:
+                        continue
                     for i in range(f_data.numValues()):
-                        item = f_data.getValue(i)
-                        if item.hasElement("FUT_CUR_GEN_TICKER"):
+                        item = _get_value_as_element(f_data, i)
+                        if _has_element(item, "FUT_CUR_GEN_TICKER"):
                             results.add(item.getElementAsString("FUT_CUR_GEN_TICKER").upper())
 
             if ev.eventType() == self._blpapi.Event.RESPONSE:
@@ -201,16 +252,20 @@ class BloombergClient:
                 ev = self._session.nextEvent()
                 for msg in ev:
                     if msg.messageType() == "HistoricalDataResponse":
-                        sec_node = msg.getElement("securityData")
+                        sec_node = _get_element_or_none(msg, "securityData")
+                        if sec_node is None or not _has_element(sec_node, "security"):
+                            continue
                         ticker = sec_node.getElementAsString("security")
 
-                        if sec_node.hasElement("securityError"):
+                        if _has_element(sec_node, "securityError"):
                             continue
 
-                        field_data = sec_node.getElement("fieldData")
+                        field_data = _get_element_or_none(sec_node, "fieldData")
+                        if field_data is None:
+                            continue
                         for i in range(field_data.numValues()):
-                            item = field_data.getValueAsElement(i)
-                            if not item.hasElement(field):
+                            item = _get_value_as_element(field_data, i)
+                            if not _has_element(item, field):
                                 continue
                             all_rows.append(
                                 {
@@ -258,16 +313,19 @@ class BloombergClient:
                 ev = self._session.nextEvent()
                 for msg in ev:
                     if msg.messageType() == "ReferenceDataResponse":
-                        sec_data = msg.getElement("securityData")
-                        for i in range(sec_data.numValues()):
-                            sd = sec_data.getValue(i)
+                        for sd in _iter_reference_security_data(msg):
+                            if not _has_element(sd, "security"):
+                                continue
                             ticker = sd.getElementAsString("security")
 
-                            if sd.hasElement("securityError"):
+                            if _has_element(sd, "securityError"):
                                 out[ticker] = float("nan")
                                 continue
 
-                            fdata = sd.getElement("fieldData")
+                            fdata = _get_element_or_none(sd, "fieldData")
+                            if fdata is None:
+                                out[ticker] = float("nan")
+                                continue
                             if fdata.hasElement(field):
                                 try:
                                     out[ticker] = float(fdata.getElementAsFloat(field))

@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import os
+import re
 from typing import Optional, Dict, Any, Iterable, List, Set, Tuple, Literal
 import json
 import hashlib
@@ -20,6 +21,17 @@ from bbg import BloombergClient, BloombergConnection
 
 
 DataSource = Literal["bloomberg", "csv", "parquet"]
+
+
+MONTH_CODE_TO_NUM: Dict[str, int] = {
+    "F": 1, "G": 2, "H": 3, "J": 4, "K": 5, "M": 6,
+    "N": 7, "Q": 8, "U": 9, "V": 10, "X": 11, "Z": 12,
+}
+
+_FUTURES_TICKER_RE = re.compile(
+    r"^\s*(?P<root>[A-Z0-9]{1,15})\s*(?P<month>[FGHJKMNQUVXZ])(?P<year>\d{1,2})\s+Comdty\s*$",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,6 +78,11 @@ class BloombergPullConfig:
     # Re-fetch trailing business days on every incremental pull to capture
     # late settlements and patchy column-level updates.
     incremental_backfill_bdays: int = 3
+    # Once a contract month is at least this many months behind the current
+    # historical window and has been quiet for `expired_contract_quiet_bdays`,
+    # keep serving it from local cache instead of re-pulling from Bloomberg.
+    expired_contract_month_lag: int = 1
+    expired_contract_quiet_bdays: int = 10
 
     # Futures universe cache controls.
     ticker_cache_ttl_days: int = 30
@@ -163,6 +180,101 @@ def _cap_history_to_end(df: Optional[pd.DataFrame], hist_end_yyyymmdd: str) -> T
 
 def _to_yyyymmdd(ts: pd.Timestamp) -> str:
     return ts.strftime("%Y%m%d")
+
+
+def _nearest_year_with_last_digit(digit: int, ref_year: int) -> int:
+    """Nearest year to ref_year whose last digit equals digit."""
+    decade = (ref_year // 10) * 10
+    candidates = [decade - 10 + digit, decade + digit, decade + 10 + digit]
+    return int(min(candidates, key=lambda y: abs(y - ref_year)))
+
+
+def _expand_contract_year(token: str, ref_year: int) -> int:
+    """Expand Bloomberg 1- or 2-digit contract year tokens into full years."""
+    token = str(token).strip()
+    if len(token) == 1:
+        return _nearest_year_with_last_digit(int(token), ref_year)
+    yy = int(token)
+    return (2000 + yy) if yy < 80 else (1900 + yy)
+
+
+def _parse_futures_contract_ticker(ticker: str, *, ref_year: int) -> Optional[Tuple[str, int, int]]:
+    """Parse a Bloomberg futures contract ticker into (root, month_num, full_year)."""
+    match = _FUTURES_TICKER_RE.match(str(ticker).strip())
+    if not match:
+        return None
+    root = str(match.group("root")).upper().strip()
+    month_code = str(match.group("month")).upper().strip()
+    year = _expand_contract_year(str(match.group("year")), ref_year)
+    month_num = MONTH_CODE_TO_NUM[month_code]
+    return root, month_num, year
+
+
+def _last_non_null_timestamp(series: pd.Series) -> Optional[pd.Timestamp]:
+    """Return the most recent non-null timestamp in a column, if any."""
+    valid = series.dropna()
+    if valid.empty:
+        return None
+    return pd.Timestamp(valid.index.max()).normalize()
+
+
+def _select_refresh_tickers(
+    tickers: List[str],
+    df_cached: Optional[pd.DataFrame],
+    *,
+    hist_end_yyyymmdd: str,
+    backfill_business_days: int,
+    expired_contract_month_lag: int,
+    expired_contract_quiet_bdays: int,
+) -> Tuple[List[str], List[str]]:
+    """
+    Split tickers into:
+    - refresh_tickers: still worth asking Bloomberg for during incremental/snapshot pulls
+    - expired_cached_futures: already-cached futures contracts that are old/quiet enough
+      to serve entirely from local storage
+    """
+    ordered = list(dict.fromkeys(str(t) for t in tickers))
+    if df_cached is None or df_cached.empty:
+        return ordered, []
+
+    hist_end_ts = pd.Timestamp(hist_end_yyyymmdd).normalize()
+    hist_month_start = hist_end_ts.replace(day=1)
+    quiet_cutoff = (
+        hist_end_ts
+        - pd.offsets.BDay(max(int(backfill_business_days), 0) + max(int(expired_contract_quiet_bdays), 0))
+    ).normalize()
+
+    refresh_tickers: List[str] = []
+    expired_cached_futures: List[str] = []
+
+    for ticker in ordered:
+        if ticker not in df_cached.columns:
+            refresh_tickers.append(ticker)
+            continue
+
+        parsed = _parse_futures_contract_ticker(ticker, ref_year=hist_end_ts.year)
+        if parsed is None:
+            refresh_tickers.append(ticker)
+            continue
+
+        _, contract_month, contract_year = parsed
+        contract_month_start = pd.Timestamp(year=contract_year, month=contract_month, day=1)
+        months_behind = (
+            (hist_month_start.year - contract_month_start.year) * 12
+            + (hist_month_start.month - contract_month_start.month)
+        )
+        if months_behind <= int(expired_contract_month_lag):
+            refresh_tickers.append(ticker)
+            continue
+
+        last_valid = _last_non_null_timestamp(df_cached[ticker])
+        if last_valid is None or last_valid >= quiet_cutoff:
+            refresh_tickers.append(ticker)
+            continue
+
+        expired_cached_futures.append(ticker)
+
+    return refresh_tickers, expired_cached_futures
 
 
 def _hash_universe(tickers: List[str]) -> str:
@@ -316,6 +428,12 @@ def _save_cache(cache_cfg: CacheConfig, df: pd.DataFrame, meta: Dict[str, Any]) 
     meta_path.write_text(json.dumps(meta, indent=2, default=str), encoding="utf-8")
 
 
+def _save_cache_meta(cache_cfg: CacheConfig, meta: Dict[str, Any]) -> None:
+    """Persist cache metadata without rewriting the cached dataset parquet."""
+    _, meta_path = _cache_paths(cache_cfg)
+    meta_path.write_text(json.dumps(meta, indent=2, default=str), encoding="utf-8")
+
+
 def _merge_wide_frames(base: pd.DataFrame, incoming: pd.DataFrame) -> pd.DataFrame:
     """
     Outer-merge two wide time-series frames on index and columns.
@@ -425,6 +543,8 @@ def load_bloomberg_dataset(
     snapshot_non_null_count = 0
     snapshot_requested = bool(bbg_cfg.include_today_snapshot)
     snapshot_pulled_at: Optional[str] = None
+    refresh_tickers: List[str] = tickers
+    expired_cached_futures: List[str] = []
 
     # Ensure cached frame does not exceed the requested historical end.
     df, was_trimmed = _cap_history_to_end(df, hist_end)
@@ -458,6 +578,15 @@ def load_bloomberg_dataset(
                 df = _merge_wide_frames(df, df_missing)
                 changed = True
 
+            refresh_tickers, expired_cached_futures = _select_refresh_tickers(
+                tickers,
+                df,
+                hist_end_yyyymmdd=hist_end,
+                backfill_business_days=bbg_cfg.incremental_backfill_bdays,
+                expired_contract_month_lag=bbg_cfg.expired_contract_month_lag,
+                expired_contract_quiet_bdays=bbg_cfg.expired_contract_quiet_bdays,
+            )
+
             # Incremental update.
             last_dt = pd.Timestamp(df.index.max()) if len(df.index) else None
             inc_start = _resolve_incremental_start_yyyymmdd(
@@ -467,9 +596,9 @@ def load_bloomberg_dataset(
                 backfill_business_days=bbg_cfg.incremental_backfill_bdays,
             )
             incremental_start_used = inc_start
-            if inc_start is not None:
+            if inc_start is not None and refresh_tickers:
                 df_inc = bbg.get_historical_timeseries(
-                    tickers,
+                    refresh_tickers,
                     field=bbg_cfg.field,
                     start_date_yyyymmdd=inc_start,
                     end_date_yyyymmdd=hist_end,
@@ -485,9 +614,18 @@ def load_bloomberg_dataset(
         df_cache, _ = _cap_history_to_end(df, hist_end)
         assert df_cache is not None
 
+        refresh_tickers, expired_cached_futures = _select_refresh_tickers(
+            tickers,
+            df_cache,
+            hist_end_yyyymmdd=hist_end,
+            backfill_business_days=bbg_cfg.incremental_backfill_bdays,
+            expired_contract_month_lag=bbg_cfg.expired_contract_month_lag,
+            expired_contract_quiet_bdays=bbg_cfg.expired_contract_quiet_bdays,
+        )
+
         # Optional today's snapshot append.
         if bbg_cfg.include_today_snapshot:
-            snap = bbg.get_snapshot(tickers, field=bbg_cfg.field, chunk_size=max(500, bbg_cfg.chunk_size))
+            snap = bbg.get_snapshot(refresh_tickers, field=bbg_cfg.field, chunk_size=max(500, bbg_cfg.chunk_size))
             snapshot_non_null_count = int(pd.to_numeric(snap, errors="coerce").notna().sum())
             snapshot_pulled_at = pd.Timestamp.now().isoformat()
             df = _append_today_snapshot(df, snap, mode=bbg_cfg.snapshot_mode)
@@ -508,6 +646,13 @@ def load_bloomberg_dataset(
             "include_today_snapshot": bool(bbg_cfg.include_today_snapshot),
             "incremental_backfill_bdays": int(bbg_cfg.incremental_backfill_bdays),
             "incremental_start_used": incremental_start_used,
+            "expired_contract_month_lag": int(bbg_cfg.expired_contract_month_lag),
+            "expired_contract_quiet_bdays": int(bbg_cfg.expired_contract_quiet_bdays),
+            "refresh_tickers_count": len(refresh_tickers),
+            "refresh_tickers_sample": refresh_tickers[:20],
+            "expired_cached_futures_count": len(expired_cached_futures),
+            "expired_cached_futures": expired_cached_futures,
+            "expired_cached_futures_sample": expired_cached_futures[:20],
             "snapshot_requested": snapshot_requested,
             "snapshot_non_null_count": int(snapshot_non_null_count),
             "snapshot_pulled_at": snapshot_pulled_at,
@@ -516,6 +661,8 @@ def load_bloomberg_dataset(
 
     if changed:
         _save_cache(cache_cfg, df_cache, meta)
+    else:
+        _save_cache_meta(cache_cfg, meta)
 
     return DataLoadResult(df=df, meta=meta)
 
