@@ -458,6 +458,254 @@ strategies:
         uom_mul: 0.022
         currency: "USD"
         fx_ticker: null
+  - name: "CME Soybean Crush (SF, SMF, BOF)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "F"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "F"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "F"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SH, SMH, BOH)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SK, SMK, BOK)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SN, SMN, BON)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SQ, SMQ, BOQ)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SU, SMU, BOU)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SX, SMV, BOV)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "X"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "V"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "V"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
+  - name: "CME Soybean Crush (SX, SMZ, BOZ)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "calculated"
+    expression: "SM + BO - S"
+    legs:
+      - alias: "S"
+        ticker_root: "S"
+        month_code: "X"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.01
+        currency: "USD"
+        fx_ticker: null
+      - alias: "SM"
+        ticker_root: "SM"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.022
+        currency: "USD"
+        fx_ticker: null
+      - alias: "BO"
+        ticker_root: "BO"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 0.11
+        currency: "USD"
+        fx_ticker: null
   - name: "CME SBO (K) - Gasoil (K)"
     category: "Biofuels"
     output_currency: "USD"
@@ -469,7 +717,7 @@ strategies:
         month_code: "K"
         multiplier: 1
         year_shift: 0
-        uom_mul: 22.0462262
+        uom_mul: 22.04622
         currency: "USD"
         fx_ticker: null
       - alias: "GOK"
@@ -491,7 +739,7 @@ strategies:
         month_code: "N"
         multiplier: 1
         year_shift: 0
-        uom_mul: 22.0462262
+        uom_mul: 22.04622
         currency: "USD"
         fx_ticker: null
       - alias: "GON"
@@ -513,7 +761,7 @@ strategies:
         month_code: "Z"
         multiplier: 1
         year_shift: 0
-        uom_mul: 22.0462262
+        uom_mul: 22.04622
         currency: "USD"
         fx_ticker: null
       - alias: "GOZ"
@@ -546,6 +794,116 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
+  - name: "BMD Palmoil (M) - Gasoil (M)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POM"
+        ticker_root: "KO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "GOM"
+        ticker_root: "QS"
+        month_code: "M"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (N) - Gasoil (N)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "PON"
+        ticker_root: "KO"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "GON"
+        ticker_root: "QS"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (Q) - Gasoil (Q)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POQ"
+        ticker_root: "KO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "GOQ"
+        ticker_root: "QS"
+        month_code: "Q"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (K) - CME SBO (K)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POK"
+        ticker_root: "KO"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "BOK"
+        ticker_root: "BO"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 22.04622
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (M) - CME SBO (M)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POM"
+        ticker_root: "KO"
+        month_code: "M"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "BOM"
+        ticker_root: "BO"
+        month_code: "M"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 22.04622
+        currency: "USD"
+        fx_ticker: null
   - name: "BMD Palmoil (N) - CME SBO (N)"
     category: "Biofuels"
     output_currency: "USD"
@@ -565,7 +923,29 @@ strategies:
         month_code: "N"
         multiplier: -1
         year_shift: 0
-        uom_mul: 22.0462262
+        uom_mul: 22.04622
+        currency: "USD"
+        fx_ticker: null
+  - name: "BMD Palmoil (Q) - CME SBO (Q)"
+    category: "Biofuels"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "POQ"
+        ticker_root: "KO"
+        month_code: "Q"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "MYR"
+        fx_ticker: "USDMYR Curncy"
+      - alias: "BOQ"
+        ticker_root: "BO"
+        month_code: "Q"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 22.04622
         currency: "USD"
         fx_ticker: null
   - name: "BMD Palmoil (U) - CME SBO (U)"
@@ -587,7 +967,7 @@ strategies:
         month_code: "U"
         multiplier: -1
         year_shift: 0
-        uom_mul: 22.0462262
+        uom_mul: 22.04622
         currency: "USD"
         fx_ticker: null
   - name: "BMD Palmoil (Z) - CME SBO (Z)"
@@ -609,7 +989,7 @@ strategies:
         month_code: "Z"
         multiplier: -1
         year_shift: 0
-        uom_mul: 22.0462262
+        uom_mul: 22.04622
         currency: "USD"
         fx_ticker: null
   - name: "Chi. Wheat (N)"
@@ -872,7 +1252,7 @@ strategies:
         fx_ticker: null
 
 
-  # Added for full summer single-leg coverage (K/M/N/Q) and watched M/N/Q -> X/Z calendars
+  # Added for extended single-leg coverage; ICE Canola is aligned to listed F/H/K/N/X maturities.
   - name: "Matif OSR (M)"
     category: "Oilseeds"
     output_currency: "EUR"
@@ -943,6 +1323,34 @@ strategies:
         uom_mul: 1.0
         currency: "EUR"
         fx_ticker: null
+  - name: "ICE Canola (F)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANF"
+        ticker_root: "RS"
+        month_code: "F"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (H)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANH"
+        ticker_root: "RS"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
   - name: "ICE Canola (K)"
     category: "Oilseeds"
     output_currency: "USD"
@@ -952,20 +1360,6 @@ strategies:
       - alias: "CANK"
         ticker_root: "RS"
         month_code: "K"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-  - name: "ICE Canola (M)"
-    category: "Oilseeds"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "CANM"
-        ticker_root: "RS"
-        month_code: "M"
         multiplier: 1
         year_shift: 0
         uom_mul: 1.0
@@ -985,15 +1379,15 @@ strategies:
         uom_mul: 1.0
         currency: "CAD"
         fx_ticker: "CADUSD Curncy"
-  - name: "ICE Canola (Q)"
+  - name: "ICE Canola (X)"
     category: "Oilseeds"
     output_currency: "USD"
     min_obs: 5
     value_source: "contract"
     legs:
-      - alias: "CANQ"
+      - alias: "CANX"
         ticker_root: "RS"
-        month_code: "Q"
+        month_code: "X"
         multiplier: 1
         year_shift: 0
         uom_mul: 1.0
@@ -1535,15 +1929,81 @@ strategies:
         uom_mul: 1.0
         currency: "EUR"
         fx_ticker: null
-  - name: "ICE Canola (M) - ICE Canola (X)"
+  - name: "ICE Canola (F) - ICE Canola (H)"
     category: "Oilseeds"
     output_currency: "USD"
     min_obs: 5
     value_source: "contract"
     legs:
-      - alias: "CANM"
+      - alias: "CANF"
         ticker_root: "RS"
-        month_code: "M"
+        month_code: "F"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANH"
+        ticker_root: "RS"
+        month_code: "H"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (H) - ICE Canola (K)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANH"
+        ticker_root: "RS"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANK"
+        ticker_root: "RS"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (K) - ICE Canola (N)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANK"
+        ticker_root: "RS"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+      - alias: "CANN"
+        ticker_root: "RS"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: "CAD"
+        fx_ticker: "CADUSD Curncy"
+  - name: "ICE Canola (K) - ICE Canola (X)"
+    category: "Oilseeds"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CANK"
+        ticker_root: "RS"
+        month_code: "K"
         multiplier: 1
         year_shift: 0
         uom_mul: 1.0
@@ -1552,28 +2012,6 @@ strategies:
       - alias: "CANX"
         ticker_root: "RS"
         month_code: "X"
-        multiplier: -1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-  - name: "ICE Canola (M) - ICE Canola (Z)"
-    category: "Oilseeds"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "CANM"
-        ticker_root: "RS"
-        month_code: "M"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-      - alias: "CANZ"
-        ticker_root: "RS"
-        month_code: "Z"
         multiplier: -1
         year_shift: 0
         uom_mul: 1.0
@@ -1596,72 +2034,6 @@ strategies:
       - alias: "CANX"
         ticker_root: "RS"
         month_code: "X"
-        multiplier: -1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-  - name: "ICE Canola (N) - ICE Canola (Z)"
-    category: "Oilseeds"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "CANN"
-        ticker_root: "RS"
-        month_code: "N"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-      - alias: "CANZ"
-        ticker_root: "RS"
-        month_code: "Z"
-        multiplier: -1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-  - name: "ICE Canola (Q) - ICE Canola (X)"
-    category: "Oilseeds"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "CANQ"
-        ticker_root: "RS"
-        month_code: "Q"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-      - alias: "CANX"
-        ticker_root: "RS"
-        month_code: "X"
-        multiplier: -1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-  - name: "ICE Canola (Q) - ICE Canola (Z)"
-    category: "Oilseeds"
-    output_currency: "USD"
-    min_obs: 5
-    value_source: "contract"
-    legs:
-      - alias: "CANQ"
-        ticker_root: "RS"
-        month_code: "Q"
-        multiplier: 1
-        year_shift: 0
-        uom_mul: 1.0
-        currency: "CAD"
-        fx_ticker: "CADUSD Curncy"
-      - alias: "CANZ"
-        ticker_root: "RS"
-        month_code: "Z"
         multiplier: -1
         year_shift: 0
         uom_mul: 1.0
@@ -2757,3 +3129,4 @@ strategies:
   #       uom_mul: 1.0
   #       currency: null
   #       fx_ticker: "CADUSD Curncy"
+

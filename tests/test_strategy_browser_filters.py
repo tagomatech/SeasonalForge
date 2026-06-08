@@ -40,6 +40,17 @@ class StrategyBrowserFilterTests(unittest.TestCase):
                 value_source="calculated",
                 output_currency="USD",
             ),
+            "Soy crush calc": StrategySpec(
+                name="Soy crush calc",
+                legs=[
+                    LegSpec(alias="S", ticker_root="S", month_code="K", multiplier=1),
+                    LegSpec(alias="SM", ticker_root="SM", month_code="K", multiplier=1),
+                    LegSpec(alias="BO", ticker_root="BO", month_code="K", multiplier=1),
+                ],
+                expression="SM + BO - S",
+                value_source="calculated",
+                output_currency="USD",
+            ),
             "Brent (Q)": StrategySpec(
                 name="Brent (Q)",
                 legs=[LegSpec(alias="COQ", ticker_root="CO", month_code="Q")],
@@ -51,6 +62,7 @@ class StrategyBrowserFilterTests(unittest.TestCase):
             "BO (M) - BO (Z)": "Oilseeds",
             "3-leg basket": "Biofuels",
             "Oil share calc": "Oilseeds",
+            "Soy crush calc": "Oilseeds",
             "Brent (Q)": "Energy",
         }
         return specs, categories
@@ -58,9 +70,10 @@ class StrategyBrowserFilterTests(unittest.TestCase):
     def test_structure_type_classification(self) -> None:
         specs, _ = self._sample_specs()
         self.assertEqual(strategy_structure_type(specs["BO Flat (K)"]), "Flat price")
-        self.assertEqual(strategy_structure_type(specs["BO (M) - BO (Z)"]), "Spread")
-        self.assertEqual(strategy_structure_type(specs["3-leg basket"]), "Multi-leg")
-        self.assertEqual(strategy_structure_type(specs["Oil share calc"]), "Calculated")
+        self.assertEqual(strategy_structure_type(specs["BO (M) - BO (Z)"]), "Calendar spread")
+        self.assertEqual(strategy_structure_type(specs["3-leg basket"]), "Multi-leg basket")
+        self.assertEqual(strategy_structure_type(specs["Oil share calc"]), "Ratio")
+        self.assertEqual(strategy_structure_type(specs["Soy crush calc"]), "Crush")
 
     def test_filter_by_structure(self) -> None:
         specs, categories = self._sample_specs()
@@ -69,12 +82,26 @@ class StrategyBrowserFilterTests(unittest.TestCase):
             categories,
             category_filter="All",
             search_query="",
-            structure_filters={"Spread"},
+            structure_filters={"Calendar spread"},
             commodity_filters=set(),
             month_filters=set(),
             commodity_match_all=False,
         )
         self.assertEqual(out, ["BO (M) - BO (Z)"])
+
+    def test_filter_by_crush_structure(self) -> None:
+        specs, categories = self._sample_specs()
+        out = filter_strategy_names(
+            specs,
+            categories,
+            category_filter="All",
+            search_query="",
+            structure_filters={"Crush"},
+            commodity_filters=set(),
+            month_filters=set(),
+            commodity_match_all=False,
+        )
+        self.assertEqual(out, ["Soy crush calc"])
 
     def test_filter_by_commodity_any(self) -> None:
         specs, categories = self._sample_specs()
@@ -102,7 +129,7 @@ class StrategyBrowserFilterTests(unittest.TestCase):
             month_filters=set(),
             commodity_match_all=True,
         )
-        self.assertEqual(out, ["3-leg basket", "Oil share calc"])
+        self.assertEqual(out, ["3-leg basket", "Oil share calc", "Soy crush calc"])
 
     def test_filter_by_month_code(self) -> None:
         specs, categories = self._sample_specs()
@@ -121,4 +148,3 @@ class StrategyBrowserFilterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

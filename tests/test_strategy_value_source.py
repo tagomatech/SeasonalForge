@@ -141,6 +141,24 @@ class StrategyValueSourceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Duplicate strategy name in YAML"):
                 load_strategies_yaml(str(path), reload_token=54321)
 
+    def test_project_yaml_limits_ice_canola_to_listed_months(self) -> None:
+        cfg = yaml.safe_load(Path("strategies.yaml").read_text(encoding="utf-8")) or {}
+        allowed = {"F", "H", "K", "N", "X"}
+        seen = set()
+        invalid = []
+
+        for item in cfg.get("strategies", []):
+            for leg in item.get("legs", []):
+                if str(leg.get("ticker_root", "")).upper() != "RS":
+                    continue
+                month = str(leg.get("month_code", "")).upper()
+                seen.add(month)
+                if month not in allowed:
+                    invalid.append((item.get("name", ""), month))
+
+        self.assertFalse(invalid, f"Invalid ICE Canola months: {invalid}")
+        self.assertTrue(allowed.issubset(seen), f"Missing expected ICE Canola months: {sorted(allowed - seen)}")
+
 
 if __name__ == "__main__":
     unittest.main()

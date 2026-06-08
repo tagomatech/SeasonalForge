@@ -57,12 +57,21 @@ VALUE_SOURCE_LABELS = {
     "contract": "Futures contract value",
     "calculated": "Calculated from legs",
 }
-STRUCTURE_ORDER = ["Flat price", "Spread", "Multi-leg", "Calculated"]
+STRUCTURE_ORDER = [
+    "Flat price",
+    "Calendar spread",
+    "Inter-commodity spread",
+    "Crush",
+    "Ratio",
+    "Multi-leg basket",
+    "Calculated",
+]
 MONTH_CODE_ORDER = {m: i for i, m in enumerate("FGHJKMNQUVXZ")}
 COMMODITY_LABELS = {
     "IJ": "Matif OSR (IJ)",
     "CA": "Matif Wheat (CA)",
     "RS": "ICE Canola (RS)",
+    "S": "CME Soybeans (S)",
     "BO": "CME SBO (BO)",
     "SM": "CME SBM (SM)",
     "KO": "BMD Palmoil (KO)",
@@ -117,16 +126,40 @@ def _strategy_search_text(name: str, spec: StrategySpec, category: str) -> str:
     return " ".join(parts).lower()
 
 
+def _normalized_expression(spec: StrategySpec) -> str:
+    """Normalize expressions for lightweight pattern-based strategy labeling."""
+    return re.sub(r"[^a-z0-9]+", "", str(spec.expression or "").lower())
+
+
 def strategy_structure_type(spec: StrategySpec) -> str:
-    """Classify strategy as flat/spread/multi-leg/calculated for UI filtering."""
-    if spec.expression or str(spec.value_source).lower() == "calculated":
-        return "Calculated"
+    """Classify strategy by trading meaning for UI filtering and badges."""
+    roots = strategy_commodity_roots(spec)
     nlegs = len(spec.legs)
+    expr_norm = _normalized_expression(spec)
+    is_formula = bool(spec.expression) or str(spec.value_source).lower() == "calculated"
+
+    if is_formula:
+        if roots == {"S", "SM", "BO"} and expr_norm == "smbos":
+            return "Crush"
+        if "/" in str(spec.expression or "") or "share" in str(spec.name).lower() or "ratio" in str(spec.name).lower():
+            return "Ratio"
+        return "Calculated"
+
     if nlegs <= 1:
         return "Flat price"
     if nlegs == 2:
-        return "Spread"
-    return "Multi-leg"
+        return "Calendar spread" if len(roots) == 1 else "Inter-commodity spread"
+    if roots == {"S", "SM", "BO"}:
+        return "Crush"
+    return "Multi-leg basket"
+
+
+def strategy_badges(spec: StrategySpec) -> List[str]:
+    """Build concise user-facing badges for a strategy."""
+    badges = [strategy_structure_type(spec), f"{len(spec.legs)} leg" if len(spec.legs) == 1 else f"{len(spec.legs)} legs"]
+    if spec.expression or str(spec.value_source).lower() == "calculated":
+        badges.append("Formula")
+    return badges
 
 
 def strategy_commodity_roots(spec: StrategySpec) -> Set[str]:
@@ -566,7 +599,10 @@ def main() -> None:
             options=STRUCTURE_ORDER,
             default=STRUCTURE_ORDER,
             format_func=lambda structure: f"{structure} ({structure_counts.get(structure, 0)})",
-            help="Flat price=1 leg, Spread=2 legs, Multi-leg=3+ legs, Calculated=expression/value-source calculated.",
+            help=(
+                "Flat price=single contract, Calendar spread=same commodity across months, "
+                "Inter-commodity spread=two-leg cross-market spread, Crush/Ratio=formula-based trading structures."
+            ),
         )
 
         month_pool = sorted(
@@ -626,10 +662,11 @@ def main() -> None:
         st.session_state["selected_strategy_name"] = strategy_name
         spec = specs[strategy_name]
         value_source_label = VALUE_SOURCE_LABELS.get(spec.value_source, str(spec.value_source))
+        badge_text = " | ".join(strategy_badges(spec))
         st.caption(
             f"Category: {strategy_categories.get(strategy_name, 'Other')} | "
-            f"Type: {value_source_label} | "
-            f"Legs: {len(spec.legs)}"
+            f"Badges: {badge_text} | "
+            f"Build: {value_source_label}"
         )
         analysis_controls_slot = st.container()
         st.divider()
@@ -870,8 +907,10 @@ def main() -> None:
 
     with tab1:
         st.subheader(strategy_name)
+        badge_text = " | ".join(strategy_badges(spec))
         st.caption(
-            f"Value source: {value_source_label} | "
+            f"Badges: {badge_text} | "
+            f"Build: {value_source_label} | "
             f"Output currency: {spec.output_currency} | "
             f"ASOF (selected): {meta['asof'].date()} | "
             f"Reference anchor year: {ref_ay} | "
