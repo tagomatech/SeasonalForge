@@ -945,8 +945,11 @@ def main() -> None:
                 if str(meta.get("alignment")) == "asof_aligned"
                 else "Seasonal axis (trading-day count since each curve first valid)"
             ),
+            chart_height=700,
         )
-        st.plotly_chart(fig, width="stretch")
+        _, chart_col, _ = st.columns([1, 6, 1])
+        with chart_col:
+            st.plotly_chart(fig, width="stretch")
 
         st.caption(
             f"Reference-year leg futures prices (raw contracts) | "

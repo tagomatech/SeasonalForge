@@ -16,6 +16,7 @@ def plot_lifecycle_overlay(
     title: str,
     show_asof_line: bool = True,
     axis_title: str = "Seasonal axis (trading-day count since each curve first valid)",
+    chart_height: int = 680,
 ) -> go.Figure:
     """
     Plot lifecycle overlay matrix and highlight the reference anchor-year curve.
@@ -91,7 +92,7 @@ def plot_lifecycle_overlay(
 
     fig.update_layout(
         title=title,
-        height=540,
+        height=chart_height,
         legend_title_text="Anchor year",
         margin=dict(l=10, r=10, t=50, b=10),
         hovermode="x unified",
