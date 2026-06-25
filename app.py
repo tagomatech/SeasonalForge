@@ -71,6 +71,7 @@ COMMODITY_LABELS = {
     "IJ": "Matif OSR (IJ)",
     "CA": "Matif Wheat (CA)",
     "RS": "ICE Canola (RS)",
+    "C": "CBoT Corn (C)",
     "S": "CME Soybeans (S)",
     "BO": "CME SBO (BO)",
     "SM": "CME SBM (SM)",

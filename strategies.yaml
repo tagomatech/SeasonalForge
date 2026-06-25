@@ -1673,6 +1673,76 @@ strategies:
         uom_mul: 1.0
         currency: null
         fx_ticker: null
+  - name: "CBoT Corn (H)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CH"
+        ticker_root: "C"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (K)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CK"
+        ticker_root: "C"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (N)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CN"
+        ticker_root: "C"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (U)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CU"
+        ticker_root: "C"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CZ"
+        ticker_root: "C"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
   - name: "Brent (Q)"
     category: "Energy"
     output_currency: "USD"
@@ -2765,6 +2835,138 @@ strategies:
         uom_mul: 1.0
         currency: null
         fx_ticker: null
+  - name: "CBoT Corn (H) - CBoT Corn (K)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CH"
+        ticker_root: "C"
+        month_code: "H"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CK"
+        ticker_root: "C"
+        month_code: "K"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (K) - CBoT Corn (N)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CK"
+        ticker_root: "C"
+        month_code: "K"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CN"
+        ticker_root: "C"
+        month_code: "N"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (N) - CBoT Corn (U)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CN"
+        ticker_root: "C"
+        month_code: "N"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CU"
+        ticker_root: "C"
+        month_code: "U"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (U) - CBoT Corn (Z)"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CU"
+        ticker_root: "C"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CZ"
+        ticker_root: "C"
+        month_code: "Z"
+        multiplier: -1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (U) - CBoT Corn (H) lag + 1"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CU"
+        ticker_root: "C"
+        month_code: "U"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CHL1"
+        ticker_root: "C"
+        month_code: "H"
+        multiplier: -1
+        year_shift: 1
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+  - name: "CBoT Corn (Z) - CBoT Corn (H) lag + 1"
+    category: "Grains"
+    output_currency: "USD"
+    min_obs: 5
+    value_source: "contract"
+    legs:
+      - alias: "CZ"
+        ticker_root: "C"
+        month_code: "Z"
+        multiplier: 1
+        year_shift: 0
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
+      - alias: "CHL1"
+        ticker_root: "C"
+        month_code: "H"
+        multiplier: -1
+        year_shift: 1
+        uom_mul: 1.0
+        currency: null
+        fx_ticker: null
   - name: "Brent (M) - Brent (X)"
     category: "Energy"
     output_currency: "USD"
@@ -2897,8 +3099,6 @@ strategies:
         uom_mul: 1.0
         currency: "USD"
         fx_ticker: null
-
-  # Added Palm Oil flat-price month coverage
   - name: "BMD Palmoil (F)"
     category: "Biofuels"
     output_currency: "USD"
